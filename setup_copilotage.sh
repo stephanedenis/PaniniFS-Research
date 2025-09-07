@@ -77,6 +77,11 @@ if [ -d "copilotage" ] && [ -d "copilotage/shared" ]; then
     echo "1. Commitez les changements: git add . && git commit -m 'Add copilotage setup with shared submodule'"
     echo "2. Vérifiez le contenu: ls -la copilotage/"
     echo "3. Testez le sous-module: cd copilotage/shared && git status"
+    echo "4. Poussez vers GitHub: git push origin main"
+    echo ""
+    echo "⚠️  IMPORTANT: Utilisez toujours --no-pager ou | cat pour éviter les blocages:"
+    echo "   git --no-pager log --oneline"
+    echo "   gh repo view --json name,url | cat"
 else
     echo "❌ Erreur lors de la configuration"
     exit 1
