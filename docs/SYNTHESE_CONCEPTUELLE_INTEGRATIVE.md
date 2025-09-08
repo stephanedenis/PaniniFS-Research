@@ -2,7 +2,7 @@
 
 **Abstract**
 
-We present a computational framework based on universal semantic primitives (dhātu) derived from Pāṇinian grammatical theory. Our approach identifies 9 minimal semantic primitives that provide 92% coverage of cross-linguistic phenomena while reducing computational complexity by 86% compared to existing approaches. We demonstrate applications in content addressing, semantic compression, and age-adaptive compilation systems. Empirical validation across 20 language families confirms universality claims. This work bridges classical linguistic theory with modern information architecture.
+This paper presents a computational framework based on universal semantic primitives (dhātu) derived from Pāṇinian grammatical theory. The approach identifies 9 minimal semantic primitives that provide 92% coverage of cross-linguistic phenomena while reducing computational complexity by 86% compared to existing approaches. Applications are demonstrated in content addressing, semantic compression, and age-adaptive compilation systems. Empirical validation across 20 language families confirms universality claims. This work bridges classical linguistic theory with modern information architecture.
 
 **Keywords**: semantic primitives, universal grammar, content addressing, semantic compression, cross-linguistic universals
 
@@ -10,9 +10,9 @@ We present a computational framework based on universal semantic primitives (dh�
 
 ## 1. Introduction
 
-Information architecture traditionally relies on syntactic representations that ignore semantic equivalence across languages and modalities. This limitation prevents effective deduplication of conceptually identical content expressed in different forms. We propose a semantic addressing system based on universal conceptual primitives derived from Sanskrit grammatical theory.
+Information architecture traditionally relies on syntactic representations that ignore semantic equivalence across languages and modalities. This limitation prevents effective deduplication of conceptually identical content expressed in different forms. This paper proposes a semantic addressing system based on universal conceptual primitives derived from Sanskrit grammatical theory.
 
-The core hypothesis is that information possesses atomic semantic structure expressible through minimal primitive sets. We investigate whether Pāṇinian dhātu (verbal roots) can provide such primitives for computational applications.
+The core hypothesis is that information possesses atomic semantic structure expressible through minimal primitive sets. This research investigates whether Pāṇinian dhātu (verbal roots) can provide such primitives for computational applications.
 
 ### 1.1 Research Questions
 
@@ -49,7 +49,7 @@ Chomsky's Universal Grammar posits innate syntactic structures across languages.
 
 ### 3.1 Primitive Identification
 
-We analyzed cross-linguistic phenomena across 20 language families to identify minimal semantic coverage. Starting from Pāṇinian dhātu classification, we applied combinatorial optimization to minimize primitive count while maintaining coverage.
+Cross-linguistic phenomena across 20 language families were analyzed to identify minimal semantic coverage. Starting from Pāṇinian dhātu classification, combinatorial optimization was applied to minimize primitive count while maintaining coverage.
 
 #### 3.1.1 Language Family Coverage
 - Indo-European (English, Sanskrit, Latin, Greek)
@@ -76,7 +76,7 @@ Cross-linguistic validation employed:
 
 ### 3.3 Implementation Architecture
 
-We implemented three integrated components:
+Three integrated components were implemented:
 - Semantic content addressing with dhātu signatures
 - Tripartite compression combining lossless, fractal, and graph-based approaches
 - Age-adaptive compilation targeting cognitive development stages
@@ -85,7 +85,7 @@ We implemented three integrated components:
 
 ### 4.1 Universal Semantic Primitives
 
-Our analysis identified 9 universal dhātu primitives with the following characteristics:
+The analysis identified 9 universal dhātu primitives with the following characteristics:
 
 | Primitive | Semantic Domain | Cross-Linguistic Occurrences | Coverage |
 |-----------|-----------------|------------------------------|----------|
@@ -112,7 +112,7 @@ Our analysis identified 9 universal dhātu primitives with the following charact
 |----------|------------|----------|-------------------------|--------------|
 | NSM (Wierzbicka) | 65 | ~80% | High | Linguistic description |
 | WordNet | 117,000 synsets | 95% | Very high | Information retrieval |
-| Our approach | 9 | 92% | Low | Content addressing |
+| Dhātu approach | 9 | 92% | Low | Content addressing |
 
 ### 4.4 Implementation Results
 
@@ -141,7 +141,7 @@ Preliminary validation across cognitive development stages shows 89.1% accuracy 
 
 ### 5.1 Theoretical Implications
 
-Our results suggest that information architecture can benefit from semantic primitives derived from universal grammar. The 92% coverage achieved with only 9 primitives indicates an optimal trade-off between expressivity and computational efficiency.
+The results suggest that information architecture can benefit from semantic primitives derived from universal grammar. The 92% coverage achieved with only 9 primitives indicates an optimal trade-off between expressivity and computational efficiency.
 
 ### 5.2 Limitations
 
@@ -176,13 +176,13 @@ Semantic content addressing based on universal primitives could enable:
 
 ## 6. Conclusion
 
-We present a dhātu-based approach to universal semantic primitives that achieves 92% cross-linguistic coverage with 86% fewer primitives than existing approaches. The framework enables practical applications in content addressing, semantic compression, and age-adaptive compilation. Empirical validation across 20 language families confirms universality claims while identifying specific areas for future development.
+This paper presents a dhātu-based approach to universal semantic primitives that achieves 92% cross-linguistic coverage with 86% fewer primitives than existing approaches. The framework enables practical applications in content addressing, semantic compression, and age-adaptive compilation. Empirical validation across 20 language families confirms universality claims while identifying specific areas for future development.
 
-Our work bridges classical linguistic theory with modern information architecture, suggesting new directions for semantic computing based on cognitively grounded primitives.
+This work bridges classical linguistic theory with modern information architecture, suggesting new directions for semantic computing based on cognitively grounded primitives.
 
 ## Acknowledgments
 
-We acknowledge the foundational work of Anna Wierzbicka and Cliff Goddard in semantic primitive research, and the broader academic community working on universal grammar and information theory.
+The author acknowledges the foundational work of Anna Wierzbicka and Cliff Goddard in semantic primitive research, and the broader academic community working on universal grammar and information theory.
 
 ## References
 
