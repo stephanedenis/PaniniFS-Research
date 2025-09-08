@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Minimal Dhātu experiment harness:
 - Loads inventory, toy corpus, and gold encodings
