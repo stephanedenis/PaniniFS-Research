@@ -486,7 +486,7 @@
         };
         
         // Initialisation
-        async function init() {
+    async function init() {
             debugLog('Initialisation du système...');
             try {
                 if (typeof THREE === 'undefined') {
@@ -495,20 +495,33 @@
                 }
                 debugLog('Three.js détecté: ' + THREE.REVISION);
 
-                // Précharger données de langue signée
-                let signVersions = null;
+                // Précharger données (mains + NMF + visage)
+                let signVersions = null; let facialVersion = null;
                 try {
-                    const signModule = await import('./modules/signDataLoader.js');
+                    const [signModule, facialModule, composerModule, validatorModule] = await Promise.all([
+                        import('./modules/signDataLoader.js'),
+                        import('./modules/facialPresetLoader.js'),
+                        import('./modules/signComposer.js'),
+                        import('./modules/signValidator.js')
+                    ]);
                     signVersions = await signModule.preloadAll();
-                    window.signData = {
-                        getHandshapes: signModule.getHandshapes,
-                        getHandshape: signModule.getHandshape,
-                        getNmfRules: signModule.getNmfRules,
-                        versions: signVersions
+                    await facialModule.loadFacialPresets();
+                    facialVersion = facialModule.getFacialVersion();
+                    window.signRuntime = {
+                        hand:getHandControllers?.(), // placeholder if future
+                        data: {
+                            getHandshapes: signModule.getHandshapes,
+                            getHandshape: signModule.getHandshape,
+                            getNmfRules: signModule.getNmfRules,
+                            getFacialPresets: facialModule.getFacialPresets
+                        },
+                        compose: composerModule.composeSign,
+                        validate: validatorModule.validateSign
                     };
-                    debugLog(`Presets signés chargés: handshapes v${signVersions.handshapes} • nmfRules v${signVersions.nmfRules}`);
+                    debugLog(`Presets chargés: handshapes v${signVersions.handshapes} • nmfRules v${signVersions.nmfRules} • facial v${facialVersion}`);
+                    setupDiagnosticsOverlay(signVersions, facialVersion);
                 } catch (e) {
-                    console.warn('⚠️ Échec chargement presets signés:', e);
+                    console.warn('⚠️ Échec préchargement runtime signé:', e);
                 }
 
                 initThreeJS();
@@ -1040,6 +1053,41 @@
         function updateStatus(message = null) {
             const defaultMessage = `Dhātu: ${currentDhatu} • Langue: ${currentLanguage} • Couverture: 92% universelle`;
             document.getElementById('status-bar').textContent = message || defaultMessage;
+        }
+
+        function setupDiagnosticsOverlay(signVersions, facialVersion){
+            if(document.getElementById('diag-overlay')) return;
+            const div = document.createElement('div');
+            div.id = 'diag-overlay';
+            div.style.position='fixed';
+            div.style.bottom='10px';
+            div.style.right='10px';
+            div.style.background='rgba(0,0,0,0.75)';
+            div.style.padding='8px 12px';
+            div.style.fontSize='11px';
+            div.style.fontFamily='monospace';
+            div.style.border='1px solid #444';
+            div.style.borderRadius='6px';
+            div.style.zIndex='1500';
+            div.innerHTML = `Sign Runtime<br>Handshapes v${signVersions?.handshapes||'?'} | NMF v${signVersions?.nmfRules||'?'} | Facial v${facialVersion||'?'}<br><span id="diag-last-compose">compose: -- ms</span> | <span id="diag-last-validate">validate: --/--</span>`;
+            document.body.appendChild(div);
+            // Monkey patch compose & validate to update overlay
+            if(window.signRuntime){
+                const origCompose = window.signRuntime.compose;
+                window.signRuntime.compose = function(opts){
+                    const spec = origCompose(opts);
+                    const el = document.getElementById('diag-last-compose');
+                    if(el) el.textContent = `compose: ${spec.meta.composeMs} ms`;
+                    return spec;
+                };
+                const origValidate = window.signRuntime.validate;
+                window.signRuntime.validate = function(spec){
+                    const res = origValidate(spec);
+                    const el = document.getElementById('diag-last-validate');
+                    if(el) el.textContent = `validate: ${res.errors.length}/${res.warnings.length}`;
+                    return res;
+                };
+            }
         }
         
         // Gestion du redimensionnement
