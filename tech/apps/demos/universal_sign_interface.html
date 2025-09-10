@@ -682,6 +682,17 @@
                     debugLog(`Modèle ${type} ajouté à la scène`);
                     
                     updateStatus(`✅ Modèle 3D ${type} chargé avec succès`);
+
+                    // Initialiser Hand IK (si module disponible)
+                    (async () => {
+                        try {
+                            const handIKMod = await import('./modules/handIK.js');
+                            window.handIK = handIKMod.initHandIK(model);
+                            if(window.handIK) debugLog('HandIK initialisé');
+                        } catch(e){
+                            console.warn('HandIK non initialisé:', e);
+                        }
+                    })();
                     
                     // Forcer un rendu
                     if (window.renderer && window.scene && window.camera) {
@@ -1019,7 +1030,10 @@
             
             if (config && handControllers.right) {
                 handControllers.right.performGesture(config);
-                
+                // Appliquer HandIK basé sur le code de lettre (si handshape disponible)
+                if(window.handIK){
+                    try { window.handIK.applyHandshape(letter); } catch(e){ console.warn('HandIK apply error', e); }
+                }
                 // Analyser selon dhātu actuel
                 const analysis = analyzeLetterWithDhatu(letter, currentDhatu);
                 updateStatus(`Lettre ${letter} (${currentLanguage}) • ${analysis} • Dhātu: ${currentDhatu}`);
