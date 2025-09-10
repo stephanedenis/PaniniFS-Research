@@ -1,31 +1,21 @@
 {
-  "name": "paninifs-research",
+  "name": "paninifs-workspace",
+  "private": true,
   "version": "1.0.0",
-  "description": "Ce repository contient les recherches, expérimentations et découvertes du projet PaniniFS.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "Workspace Node pour les sous-projets techniques PaniniFS (tests, outils).",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "playwright test",
-    "test:firefox": "playwright test --project=firefox",
-    "test:headed": "playwright test --headed",
-    "test:ui": "playwright test --ui",
-    "test:report": "playwright show-report"
+    "test": "npm --workspace @paninifs/test-runner run test",
+    "test:firefox": "npm --workspace @paninifs/test-runner run test:firefox",
+    "test:headed": "npm --workspace @paninifs/test-runner run test:headed",
+    "test:ui": "npm --workspace @paninifs/test-runner run test:ui",
+    "test:report": "npm --workspace @paninifs/test-runner run test:report"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stephanedenis/PaniniFS-Research.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stephanedenis/PaniniFS-Research/issues"
-  },
-  "homepage": "https://github.com/stephanedenis/PaniniFS-Research#readme",
-  "devDependencies": {
-    "@playwright/test": "^1.55.0"
-  }
+  "license": "ISC"
 }
