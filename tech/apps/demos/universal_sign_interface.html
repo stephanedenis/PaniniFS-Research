@@ -603,8 +603,12 @@
             debugLog(`Éclairage configuré - ${window.scene.children.length} lumières ajoutées`);
         }
         
+        let _lastFrameTime = performance.now();
         function animate() {
             requestAnimationFrame(animate);
+            const nowT = performance.now();
+            const dt = (nowT - _lastFrameTime) / 1000; // seconds
+            _lastFrameTime = nowT;
             
             // Animation de rotation douce pour les objets 3D
             if (scene && scene.children.length > 3) {
@@ -615,6 +619,10 @@
                 });
             }
             
+            // Hand IK blending update
+            if(window.handIK && window.handIK.update){
+                try { window.handIK.update(dt); } catch(e){ /* silent */ }
+            }
             if (window.renderer && window.scene && window.camera) {
                 window.renderer.render(window.scene, window.camera);
             }

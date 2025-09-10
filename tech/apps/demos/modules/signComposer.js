@@ -15,6 +15,12 @@ export function composeSign({handshapeCode, movementPath = [{x:0,y:0,z:0}], dura
   const spec = { version:'0.1', handshapeCode, handshape, movementPath, durationMs, phases, nmfPresetIds, facialPresetIds, facial, meta:{createdAt:Date.now()} };
   const t1 = now();
   spec.meta.composeMs = +(t1 - t0).toFixed(2);
+  // Sync with HandIK if available
+  try {
+    if(handshapeCode && window.handIK && window.handIK.transitionToHandshape){
+      window.handIK.transitionToHandshape(handshapeCode, Math.min(300, durationMs*0.4));
+    }
+  } catch(e){ /* silent */ }
   return spec;
 }
 

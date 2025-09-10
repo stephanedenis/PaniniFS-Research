@@ -13,6 +13,17 @@ const FINGER_BONES = {
   pinky: ['pinky_metacarpal', 'pinky_proximal', 'pinky_middle', 'pinky_distal']
 };
 
+// Alternate name patterns to improve detection (lowercased)
+const ALT_NAME_MAP = [
+  { pattern: /thumb.*metacarp/, alias: 'thumb_metacarpal' },
+  { pattern: /thumb.*prox/, alias: 'thumb_proximal' },
+  { pattern: /index.*metacarp/, alias: 'index_metacarpal' },
+  { pattern: /index.*prox/, alias: 'index_proximal' },
+  { pattern: /middle.*metacarp/, alias: 'middle_metacarpal' },
+  { pattern: /ring.*metacarp/, alias: 'ring_metacarpal' },
+  { pattern: /pinky.*metacarp|little.*metacarp/, alias: 'pinky_metacarpal' }
+];
+
 // Angle keys mapping: MCP->proximal flexion, PIP->middle, DIP->distal, splay.* -> metacarpal Y spread
 const ANGLE_KEY_MAP = {
   MCP: { axis: 'x', scale: deg=>deg * (Math.PI/180) },
@@ -24,41 +35,82 @@ export class HandIK {
   constructor(root){
     this.root = root; // three.js model root
     this.boneIndex = {};
+    this.targets = {}; // boneName -> { xTarget }
+    this.speed = 8; // blending speed factor
+  this._activeTransition = null; // { endTime, code }
     this._indexBones(root);
   }
   _indexBones(obj){
     obj.traverse(node => {
       if(node.isBone){
-        this.boneIndex[node.name.toLowerCase()] = node;
+        const key = node.name.toLowerCase();
+        this.boneIndex[key] = node;
+        this.targets[key] = { xTarget: node.rotation.x };
+  // Alternate mapping
+  ALT_NAME_MAP.forEach(m => { if(m.pattern.test(key)) { this.boneIndex[m.alias] = node; this.targets[m.alias] = this.targets[key]; } });
       }
     });
+  }
+  applyHandshapeImmediate(code){
+    const hs = getHandshape(code);
+    if(!hs){ console.warn('[HandIK] handshape not found', code); return; }
+    this._iterateAngles(hs.angles, (bone, rad)=>{ bone.rotation.x = rad; this.targets[bone.name.toLowerCase()].xTarget = rad; });
   }
   applyHandshape(code){
     const hs = getHandshape(code);
     if(!hs){ console.warn('[HandIK] handshape not found', code); return; }
-    const angles = hs.angles || {};
+    this._iterateAngles(hs.angles, (bone, rad)=>{ const tgt = this.targets[bone.name.toLowerCase()]; if(tgt) tgt.xTarget = rad; });
+  }
+  transitionToHandshape(code, durationMs=300){
+    this.applyHandshape(code);
+    this._activeTransition = { endTime: performance.now() + durationMs, code };
+  }
+  _iterateAngles(angles={}, fn){
     Object.entries(angles).forEach(([k,v])=>{
-      // e.g. index.MCP
-      const [finger, joint] = k.split('.');
-      if(!joint){ return; }
-      if(finger.startsWith('splay')){ return; } // skip splay heuristic for now
+      const [finger,joint] = k.split('.');
+      if(!joint) return;
+      if(finger === 'splay'){ // splay.index / splay.pinky
+        // crude splay: rotate metacarpal Y slightly
+        const [_, which] = k.split('.');
+        const metaName = which === 'index' ? 'index_metacarpal' : which === 'pinky' ? 'pinky_metacarpal' : null;
+        if(!metaName) return;
+        const bone = this._findBone(metaName);
+        if(!bone) return;
+        const rad = (v * 0.5) * (Math.PI/180); // reduce magnitude
+        const target = this.targets[metaName.toLowerCase()];
+        if(target) target.yTarget = (target.yTarget ?? bone.rotation.y) + rad;
+        return;
+      }
       const boneList = FINGER_BONES[finger];
       if(!boneList) return;
       const map = ANGLE_KEY_MAP[joint];
       if(!map) return;
-      // Choose bone by joint order: MCP -> proximal (index 1), PIP -> middle (index 2), DIP -> distal (index 3)
-      const boneName = (joint === 'MCP') ? boneList[1] : (joint === 'PIP') ? boneList[2] : (joint === 'DIP') ? boneList[3] : null;
+      const boneName = (joint==='MCP')?boneList[1]:(joint==='PIP')?boneList[2]:(joint==='DIP')?boneList[3]:null;
       if(!boneName) return;
       const bone = this._findBone(boneName);
       if(!bone) return;
       const rad = map.scale(v);
-      // Simple set on X; could blend instead of overwrite
-      bone.rotation.x = rad;
+      fn(bone, rad);
     });
   }
-  _findBone(name){
-    return this.boneIndex[name.toLowerCase()] || null;
+  update(dt){
+    // Simple exponential approach
+    const blend = 1 - Math.exp(-this.speed * dt);
+    Object.entries(this.targets).forEach(([key, tgt])=>{
+      const bone = this.boneIndex[key];
+      if(!bone) return;
+      const current = bone.rotation.x;
+      bone.rotation.x = current + (tgt.xTarget - current) * blend;
+      if(typeof tgt.yTarget === 'number') {
+        const cy = bone.rotation.y;
+        bone.rotation.y = cy + (tgt.yTarget - cy) * blend;
+      }
+    });
+    if(this._activeTransition && performance.now() > this._activeTransition.endTime){
+      this._activeTransition = null;
+    }
   }
+  _findBone(name){ return this.boneIndex[name.toLowerCase()] || null; }
 }
 
 export function initHandIK(model){
