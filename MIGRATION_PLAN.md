@@ -1,6 +1,6 @@
 # Repository Migration Plan (Dual Axis: Domain vs Tech)
 
-Status: Phase P3 COMPLETED & Phase P4 IN PROGRESS – Updated 2025-09-10 UTC
+Status: Phase P4 COMPLETED – Updated 2025-09-10 UTC
 Scope: Define mapping from current layout to target structure separating domain knowledge (panini/) and technical implementation (tech/).
 
 ## 1. Principles
@@ -152,6 +152,24 @@ Executed:
 - Layout verification passed.
 
 Outcome: Ready for final cleanup & enforcement.
+
+### Phase P4 (Completed 2025-09-10 UTC)
+Executed:
+- Legacy directories `interactive-validator/` and `language/` archived (tar) then removed.
+- Verifier updated to assert absence of legacy directories.
+- Final verification pass successful after cleanup.
+- Migration plan finalized with all phases logged.
+
+Final State Guarantees:
+- Domain axis (`panini/`) contains only research, specs, data sources, roadmap.
+- Tech axis (`tech/`) contains all runtime assets, apps, tests, scripts, docs, governance.
+- No root-level stray test, vendor, or image files.
+- Source/runtime data split established and enforced.
+
+Next (Post-Migration) Recommendations:
+1. Add CI job invoking `tech/scripts/validation/verify_layout.sh`.
+2. Introduce lint rule / pre-commit hook to block root-level *.png, test-*.js, vendor libs.
+3. Document developer onboarding referencing this plan (convert to archived doc or keep live for governance).
 
 ---
 (End of plan)

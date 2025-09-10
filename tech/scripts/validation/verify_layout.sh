@@ -29,6 +29,7 @@ check exists tech/docs/governance/copilot_rules.md tech/docs/reports/tests_full_
 check absent three.min.js dat.gui.min.js GLTFLoader.js handshapes_preset.v0.1.json nmf_rules.v0.1.json
 check absent GUIDE_DEPLOIEMENT_LSQ_FINAL.md GUIDE_MAINS_ARTICULEES_AVANCEES.md test-real-3d-models.js test_functional.py test_functional_fixed.py || true
 check absent REGLES_COPILOTAGE.md RAPPORT_TESTS_COMPLET.md VALIDATION_STATUS.md cloud-processing/FREE_COMPUTE_STRATEGY.md || true
+check absent interactive-validator language || true
 
 if $pass; then
   echo "[OK] Layout verification passed"
