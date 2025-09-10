@@ -1,6 +1,6 @@
 # Repository Migration Plan (Dual Axis: Domain vs Tech)
 
-Status: Phase P3 IN PROGRESS (governance, reports, strategy) – Updated 2025-09-10 UTC
+Status: Phase P3 COMPLETED & Phase P4 IN PROGRESS – Updated 2025-09-10 UTC
 Scope: Define mapping from current layout to target structure separating domain knowledge (panini/) and technical implementation (tech/).
 
 ## 1. Principles
@@ -142,18 +142,16 @@ Phase Closure Risks Mitigated:
 
 Transition: Commencing Phase P3 (governance docs, reports, roadmap/strategy, image governance, cleanup).
 
-### Phase P3 (In Progress 2025-09-10 UTC)
-Executed so far:
-- Governance rules relocated to `tech/docs/governance/copilot_rules.md`.
-- Reports relocated: `tests_full_report.md`, `validation_status.md` under `tech/docs/reports/`.
-- Strategy document relocated to `panini/roadmap/compute_strategy.md`.
-- Verifier extended to cover governance, reports, roadmap.
+### Phase P3 (Completed 2025-09-10 UTC)
+Executed:
+- Governance rules relocation.
+- Reports relocation (tests & validation status).
+- Strategy document relocation.
+- Verifier extended (governance/reports/roadmap checks).
+- Image assets policy added (`tech/docs/governance/image_assets_policy.md`).
+- Layout verification passed.
 
-Pending for Phase P3 completion:
-1. Image governance notes (if needed) and confirm no stray large images remain.
-2. Optional consolidation of any remaining domain vs tech stray markdowns.
-3. Run verification script and test suites; capture summary into reports if update required.
-4. Update status to Phase P3 COMPLETED with timestamp and prepare for P4 cleanup tasks (removing empty dirs, enforcing CI checks).
+Outcome: Ready for final cleanup & enforcement.
 
 ---
 (End of plan)
