@@ -24,12 +24,23 @@ check exists tech/docs/operations/lsq_deployment_guide.md panini/specs/hands/adv
 check exists tech/assets/images/debug tech/assets/images/errors || true
 check exists tech/tests/js tech/tests/py || true
 check exists tech/docs/governance/copilot_rules.md tech/docs/reports/tests_full_report.md tech/docs/reports/validation_status.md panini/roadmap/compute_strategy.md || true
+check exists tech/docs/governance/history panini/references/history/reports panini/references/history/experiments panini/references/history/indices panini/references/history/sessions panini/references/history/syntheses panini/discoveries/research_notes || true
+check exists panini/references/history/RETENTION_POLICY.md || true
 
 # Legacy locations that must be absent
 check absent three.min.js dat.gui.min.js GLTFLoader.js handshapes_preset.v0.1.json nmf_rules.v0.1.json
 check absent GUIDE_DEPLOIEMENT_LSQ_FINAL.md GUIDE_MAINS_ARTICULEES_AVANCEES.md test-real-3d-models.js test_functional.py test_functional_fixed.py || true
 check absent REGLES_COPILOTAGE.md RAPPORT_TESTS_COMPLET.md VALIDATION_STATUS.md cloud-processing/FREE_COMPUTE_STRATEGY.md || true
 check absent interactive-validator language || true
+check absent archives tech/docs/archives archives/ archives_backup || true
+
+# Forbid stray nested 'archives' directories anywhere except allowed history destinations
+for d in $(find . -type d -name archives 2>/dev/null | grep -v './\.git' || true); do
+  case "$d" in
+    ./panini/references/history/*) ;; # allowed under structured history
+    *) echo "[SHOULD_BE_REMOVED] unexpected archives dir: $d"; pass=false ;;
+  esac
+done
 
 if $pass; then
   echo "[OK] Layout verification passed"

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Baby Sign Gestures - PaniniFS Research</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .demo-section {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+        }
+        .age-stage {
+            background-color: #e8f5e8;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .gesture-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .gesture-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            width: 120px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .gesture-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .gesture-name {
+            font-weight: bold;
+            margin-top: 8px;
+            color: #2c3e50;
+        }
+        .gesture-age {
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .inline-demo {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Demo Baby Sign Gestures Animés</h1>
+
+<div class="demo-section">
+    <h2>🎯 Showcase Interactif des 18 Gestes</h2>
+    <p>Survolez les gestes pour voir l'effet d'agrandissement :</p>
+    
+    <div class="gesture-showcase">
+        <div class="gesture-card">
+            <div data-baby-sign="EXIST">[EXIST]</div>
+            <div class="gesture-name">EXIST</div>
+            <div class="gesture-age">4 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="WANT">[WANT]</div>
+            <div class="gesture-name">WANT</div>
+            <div class="gesture-age">5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="ATTEND">[ATTEND]</div>
+            <div class="gesture-name">ATTEND</div>
+            <div class="gesture-age">4 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="COMM">[COMM]</div>
+            <div class="gesture-name">COMM</div>
+            <div class="gesture-age">6.5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="MORE">[MORE]</div>
+            <div class="gesture-name">MORE</div>
+            <div class="gesture-age">7 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="STOP">[STOP]</div>
+            <div class="gesture-name">STOP</div>
+            <div class="gesture-age">7.5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="POINT">[POINT]</div>
+            <div class="gesture-name">POINT</div>
+            <div class="gesture-age">9 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="ITER">[ITER]</div>
+            <div class="gesture-name">ITER</div>
+            <div class="gesture-age">9.5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="DONE">[DONE]</div>
+            <div class="gesture-name">DONE</div>
+            <div class="gesture-age">10 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="GO">[GO]</div>
+            <div class="gesture-name">GO</div>
+            <div class="gesture-age">12 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="WHERE">[WHERE]</div>
+            <div class="gesture-name">WHERE</div>
+            <div class="gesture-age">13 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="HELP">[HELP]</div>
+            <div class="gesture-name">HELP</div>
+            <div class="gesture-age">12.5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="SAME_DIFF">[SAME_DIFF]</div>
+            <div class="gesture-name">SAME/DIFF</div>
+            <div class="gesture-age">15 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="THINK">[THINK]</div>
+            <div class="gesture-name">THINK</div>
+            <div class="gesture-age">15.5 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="FEEL">[FEEL]</div>
+            <div class="gesture-name">FEEL</div>
+            <div class="gesture-age">16 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="WHY">[WHY]</div>
+            <div class="gesture-name">WHY</div>
+            <div class="gesture-age">18 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="WHEN">[WHEN]</div>
+            <div class="gesture-name">WHEN</div>
+            <div class="gesture-age">17 mois</div>
+        </div>
+        
+        <div class="gesture-card">
+            <div data-baby-sign="PRETEND">[PRETEND]</div>
+            <div class="gesture-name">PRETEND</div>
+            <div class="gesture-age">20 mois</div>
+        </div>
+    </div>
+</div>
+
+<div class="demo-section">
+    <h2>📊 Tableau avec Gestes Intégrés</h2>
+    <p>Exemple d'intégration dans un tableau de documentation :</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Âge</th>
+                <th>Geste Animé</th>
+                <th>Dhātu</th>
+                <th>Concept</th>
+                <th>Validation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="age-stage">4m</td>
+                <td><div data-baby-sign="EXIST">[EXIST]</div></td>
+                <td>EXIST</td>
+                <td>Fondement ontologique</td>
+                <td>91% enfants</td>
+            </tr>
+            <tr>
+                <td class="age-stage">5m</td>
+                <td><div data-baby-sign="WANT">[WANT]</div></td>
+                <td>WANT</td>
+                <td>Intentionnalité basique</td>
+                <td>94% enfants</td>
+            </tr>
+            <tr>
+                <td class="age-stage">7m</td>
+                <td><div data-baby-sign="MORE">[MORE]</div></td>
+                <td>MORE</td>
+                <td>Répétition/continuation</td>
+                <td>88% enfants</td>
+            </tr>
+            <tr>
+                <td class="age-stage">9m</td>
+                <td><div data-baby-sign="POINT">[POINT]</div></td>
+                <td>POINT</td>
+                <td>Référence déictique</td>
+                <td>91% enfants</td>
+            </tr>
+            <tr>
+                <td class="age-stage">18m</td>
+                <td><div data-baby-sign="WHY">[WHY]</div></td>
+                <td>WHY</td>
+                <td>Causalité complexe</td>
+                <td>38% enfants</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="inline-demo">
+    <h3>💡 Utilisation Inline dans le Texte</h3>
+    <p>Les gestes peuvent être intégrés directement dans le texte : Le geste <span data-baby-sign="MORE">[MORE]</span> représente l'itération primitive, tandis que <span data-baby-sign="POINT">[POINT]</span> indique la référence déictique. La combinaison <span data-baby-sign="HELP">[HELP]</span> + <span data-baby-sign="MORE">[MORE]</span> exprime la coopération répétée.</p>
+</div>
+
+<div class="demo-section">
+    <h2>🔧 Intégration Technique</h2>
+    <p><strong>Taille totale</strong> : ~8KB (JS + CSS)</p>
+    <p><strong>Usage</strong> : Ajoutez simplement <code>data-baby-sign="GESTURE_NAME"</code> à n'importe quel élément</p>
+    <p><strong>Compatibilité</strong> : Tous navigateurs modernes, responsive, pas de dépendances</p>
+    
+    <h3>Code d'exemple :</h3>
+    <pre><code>&lt;span data-baby-sign="MORE"&gt;[MORE]&lt;/span&gt;
+&lt;div data-baby-sign="THINK"&gt;Concept de pensée&lt;/div&gt;</code></pre>
+</div>
+
+<!-- Chargement de la bibliothèque -->
+<script src="baby-sign-gestures.js"></script>
+
+</body>
+</html>
