@@ -486,7 +486,7 @@
         };
         
         // Initialisation
-        function init() {
+        async function init() {
             debugLog('Initialisation du système...');
             try {
                 if (typeof THREE === 'undefined') {
@@ -494,7 +494,23 @@
                     return;
                 }
                 debugLog('Three.js détecté: ' + THREE.REVISION);
-                
+
+                // Précharger données de langue signée
+                let signVersions = null;
+                try {
+                    const signModule = await import('./modules/signDataLoader.js');
+                    signVersions = await signModule.preloadAll();
+                    window.signData = {
+                        getHandshapes: signModule.getHandshapes,
+                        getHandshape: signModule.getHandshape,
+                        getNmfRules: signModule.getNmfRules,
+                        versions: signVersions
+                    };
+                    debugLog(`Presets signés chargés: handshapes v${signVersions.handshapes} • nmfRules v${signVersions.nmfRules}`);
+                } catch (e) {
+                    console.warn('⚠️ Échec chargement presets signés:', e);
+                }
+
                 initThreeJS();
                 updateDhatuDisplay('RELATE');
                 updateStatus();
