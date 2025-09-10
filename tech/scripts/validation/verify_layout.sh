@@ -42,6 +42,22 @@ for d in $(find . -type d -name archives 2>/dev/null | grep -v './\.git' || true
   esac
 done
 
+# Root whitelist enforcement
+root_allowed=(./copilotage ./docs ./panini ./tech ./.git ./node_modules)
+for entry in ./*; do
+  [ -e "$entry" ] || continue
+  case "$entry" in
+    ./README.md|./package.json|./package-lock.json|./.gitmodules) continue ;;
+  esac
+  if [ -d "$entry" ]; then
+    skip=false
+    for a in "${root_allowed[@]}"; do [ "$entry" = "$a" ] && skip=true && break; done
+    if ! $skip; then
+      echo "[SHOULD_BE_REMOVED] disallowed root directory: $entry"; pass=false
+    fi
+  fi
+done
+
 if $pass; then
   echo "[OK] Layout verification passed"
   exit 0

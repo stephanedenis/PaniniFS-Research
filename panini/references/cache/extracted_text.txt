@@ -1,0 +1,622 @@
+Design and Nature III: Comparing Design in Nature with Science and Engineering 115
+
+Functional information and entropy in
+living systems
+A. C. McIntosh
+Energy and Resources Research Institute, University of Leeds, Leeds, UK
+
+Abstract
+In any living system one quickly becomes aware of the extraordinary complexity
+that so organises the chemical proteins at the biochemical level as to effectively
+build digital machinery which for many years, since the discovery by Crick and
+Watson of DNA, has been the goal of modern software engineers to emulate.
+The functional complexity of these systems is clearly heavily dependent on the
+material environment in which such a system is operating and indeed uses all the
+same chemical and physical laws that are used to such good effect by any man
+made machines. What though are the laws that such organisation must inherently
+obey for natural systems? Can one quantify the organisational structure that sits
+on top of the matter and energy in any real system?
+In this paper, the author will consider the fundamental aspects of entropy and
+the second law of thermodynamics applied first of all in the traditional
+definitions used in heat and chemical systems. Then analogous representations of
+‘logical entropy’ will be discussed where for a number of years many scientists
+(such as Prigogine) have been attempting to simulate in a rational way the idea
+of functional complexity. Prigogine’s work has primarily been seeking to express
+self organisation in terms of non-equilibrium thermodynamics and the term
+‘Prigogine entropy’ has thus been introduced. Allied closely to this is the concept
+of the definition of information which must go beyond the simple recipe of
+Shannon’s Theory, that essentially only deals with the transmission of existing
+data. The main issue at stake in any discussions of functional complexity is
+arriving at a logical approach to describing the possible states of the system, and
+secondly to establishing a valid proportionality constant that is analogous to the
+Boltzmann constant of traditional thermodynamics. In this paper we discuss how
+the laws of thermodynamics can be understood in terms of the possible
+information content of molecules. We build on the concept of information
+transfer and the notion of ‘logical entropy’, to considering the application of the
+laws of thermodynamics to non-equilibrium chemistry. This then concerns the
+basic definition of how information is defined and connected to the fundamental
+laws of thermodynamics. Although the paper may raise more questions than
+answers, the aim will be to at least move further towards a rigorous scientific
+treatment of the whole concept of organisation and system structure by seeking
+parallel (logical) laws of complexity in system states to the well known laws of
+thermodynamics.
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+doi:10.2495/DN060111
+
+116 Design and Nature III: Comparing Design in Nature with Science and Engineering
+
+1
+
+Introduction
+
+The defining of information is a key issue in the origins debate, since terms such
+as ‘advance’ and ‘simple to complex’ have little direct meaning at the
+biochemical level. Intuitive reasoning presupposes the worldview of such
+statements, and the discussions on origins are fundamentally to do with
+worldviews. Consequently the biochemical arguments are always going to be a
+vital battleground because of the root issues at stake.
+Claude Shannon in 1948 [3] introduced the basis for the definition of the unit
+of information content. He argued that any logical process can be reduced to a
+series of either/or decisions (called in mathematics Booleian Algebra). Each
+decision can be represented by a 1 or 0, represented in computer hardware terms
+by whether a microcircuit is ‘on’ or ‘off’ respectively. This unit is termed a ‘bit’
+of information, and as complication increases it is more convenient to use the
+unit of a byte (8 bits). Thus any system and its information content can now be
+quantified in terms of this unit of information. Dawkins referring to the Shannon
+concepts in an essay entitled ‘The Information Challenge’ [4] made the
+following statement which is quoted in full, since it lies right at the heart of the
+thesis held by most evolutionary biologists that information increase is possible
+by natural selection operating on successive mutations :
+“Let me turn, finally to another way of looking at whether the information
+content of genomes increases evolution. We now switch from the broad
+sweep of evolutionary history to the minutiae of natural selection. Natural
+selection itself, when you think about it, is a narrowing down from a wide
+initial field of possible alternatives, to the narrower field of the alternatives
+actually chosen. Random genetic error (mutation), sexual recombination and
+migratory mixing all provide a wide field of genetic variation: the available
+alternatives. Mutation is not an increase in true information content, rather
+the reverse, for mutation in the Shannon analogy, contributes to increasing
+the prior uncertainty. But now we come to natural selection, which reduces
+the ‘prior uncertainty’ and therefore, in Shannon’s sense, contributes
+information to the gene pool. In every generation, natural selection removes
+the less successful genes from the gene pool, so the remaining gene pool is a
+narrower subset. The narrowing is non-random, in the direction of
+improvement, where improvement is defined, in the Darwinian way, as
+improvement in fitness to survive and reproduce. Of course the total range
+of variation is topped up again in every generation by new mutation and
+other kinds of variation. But it still remains true that natural selection is a
+narrowing down from an initially wider field of possibilities, including
+unsuccessful ones, to a narrower field of successful ones. This is analogous
+to the definition of information with which we began: information is what
+enables the narrowing down from prior uncertainty (the initial range of
+possibilities) to later certainty (the ‘successful’ choice among prior
+probabilities). According to this analogy, natural selection is by definition a
+
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+Design and Nature III: Comparing Design in Nature with Science and Engineering 117
+
+process whereby information is fed into the gene pool of the next
+generation.”
+
+Figure 1:
+
+Sample genetic code with complementary strands.
+
+This important paragraph shows the dilemma that faces an approach which
+only considers matter and energy without information (the ‘bottom up’
+approach). There is an admission of the need for new information to counter the
+narrowing effect of natural selection as usually defined. This definition is simply
+that natural selection is the favourable advantage of random mutations in one
+generation making that alteration more likely to survive and be thus more
+prolific in the next generation. The narrowing effect is that the number of options
+to choose from is reduced since once the selection is made, the original gene
+pool is reduced. The answer suggested here is to alter the definition of natural
+selection (see last sentence of quote) and to further propose the topping up of the
+gene pool by the very mutations themselves. The formidable obstacles to this
+proposition lie on a macroscopic level in the very nature of DNA (see fig. 1)
+which has been shown to have the immense capability of in situ repair work. For
+example there are enzymes which are specifically assigned to nucleotide excision
+repair – they recognise wrongly paired bases in the DNA nucleotides (Adenine
+(A), Thymine (T), Cytosine (C) and Guanine (G)) connecting the two
+deoxyribose sugar-phosphate strands. This means that mutations are generally
+corrected (see for example the papers by Jackson [5] and de Laat et al [6]), so
+that even if speciation does occur due to slight modifications and adaptations of
+the phylogeny, any serious departures in the genetic information would be acted
+against by the DNA’s own repair factory. Mutations do not increase information
+content – rather the reverse is true. The flightless Galapagos Cormorant is a
+classic example. Evidently repair by the above techniques was not possible, and
+the genetic defect has persisted, such that information has certainly been lost,
+and the gene pool (in that case irrevocably) reduced. At the very least Dawkins’
+assertion at the end is misleading, for it suggests there is a natural source of new
+information which experimental observation denies. Natural selection cannot be
+redefined and is not the handmaid of macro evolution.
+However there is a more fundamental issue. At the molecular level, the laws
+of thermodynamics do not permit step changes in the biochemical machinery set
+up for a particular function performed by the cells of living organisms. That is
+any random mutations always have the effect of increasing the disorder (or what
+we will shortly define as logical entropy) of any particular system, and
+consequently decreasing the information content. What is evident is that the
+initial information content rather than being small must in fact be large, and is in
+fact vital for any process to work to begin with. The issue of functional
+complexity and information is considered exhaustively by Meyer [7] who argues
+that the neo-Darwinist model cannot explain all the appearances of design in
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+118 Design and Nature III: Comparing Design in Nature with Science and Engineering
+biology. Even within the neo-Darwinist camp the evidence of convergence
+(similarity) in the suggested evolutionary development of disparate phylogeny
+has caused some writers [8] to consider ‘channelling’ of evolution. Such thinking
+is a tacit admission of a teleological influence. That information does not
+increase by random changes (contrary to Dawkins’ assertion) is evident when we
+consider in the following section, the logical entropy of a biochemical system.
+
+2
+
+The second law of thermodynamics
+
+A succinct statement of the second law is “The amount of energy available for
+useful work in a given system is decreasing. The entropy (dissipated useful
+energy per degree Kelvin) is always increasing.”
+Examples of this principle abound. Heat always flows from hot to cold. In the
+process it can be made to do work but always some energy will be lost to the
+environment, and that energy cannot be retrieved. Water flows downhill and
+loses potential energy which is changed into kinetic energy. This can again be
+made to do work (as in a hydroelectric power plant). However some energy will
+be lost such that if one was to use all the energy generated to pump the same
+water back up to its source, it would not reach the same level. The difference of
+original potential energy to that corresponding to the new level, divided by the
+temperature (which in that case is virtually constant) is the entropy of the system.
+Such a measure will always give an entropy gain.
+There is no known system where this law does not apply. The fact that the
+entropy of a given closed system increases, effectively brings with it an
+inevitable decline in usefulness of all systems. The phrase ‘arrow of time’ is
+often used to describe this since the second law brings in the concept of nonreversibility of all real systems.
+2.1 The second law and open systems
+In that the second law of inevitable entropy increase applies to a closed system,
+some have maintained that with an open system one could have entropy
+decreasing in one area while the overall entropy of the two systems together
+(closed) is increasing. An illustration would be of two ice boxes A and B (see
+fig. 2) where there is an allowance for small contact between them but with
+(perfect) insulation round the rest of the cube A and poor insulation round cube
+B. Systems A and B are both then open systems, as is the system A and B
+together (referred to as A+B), but system A and B with the surrounding region 1,
+(that is the complete system) is closed. The entropy of the overall complete
+system then must increase with time. That is there will eventually be equilibrium
+throughout every region. Suppose we start with Temperature T1 appreciably
+hotter than TA and TB. Thus for instance we could have T1 = 100°C and TA and
+TB both at -10°C. Initially as time progresses the original equal temperatures TA
+and TB become different. TA will stay close to the original -10°C, but TB will
+begin to move to a higher value (say +5°C) due to there being good conduction
+of heat into ice box B (as against the insulated ice box A). Now consider system
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+Design and Nature III: Comparing Design in Nature with Science and Engineering 119
+
+A and B together (A+B). One now has an open system with decreasing entropy,
+in that useable energy transfer between the two ice boxes is possible, and work
+can be achieved where before in that system, treated in isolation, none was
+possible. However one notes two things. First that this is possible only for a
+finite time – eventually the temperature difference will reach a maximum (when
+TB gets close to T1) and at this point system A+B will have a minimum entropy
+condition. After this system A+B will then experience a rising entropy condition.
+Notice also that the initial conditions (different insulation levels) are important
+for it to be possible to achieve a low entropy condition local to system A+B.
+Effectively one has an elementary ‘machine’ which is making use of the nonhomogeneous temperature across the complete system. This demonstrates the
+reality of how the second law applies in open systems, and that extra energy
+from outside is no use unless there is a machine (i.e. teleonomy / information)
+available.
+
+Figure 2:
+
+Open system A and B.
+
+2.2 Thermodynamic entropy and logical entropy
+A connection can also be made between entropy and disorganisation or disorder.
+The first to formalise this use of the concept of entropy was the Austrian
+physicist Ludwig Boltzmann.
+Klyce [9] in a useful article, introduces the concept of logical entropy as
+follows. As the laws of thermodynamics were investigated in the latter part of
+the nineteenth century, it was evident that the second law implied there was a
+preferred direction in time even at the molecular level, which seemed to
+contradict the growing physical understanding of the laws of physics applied to
+molecular collisions, which indicated here there was no preferred direction in
+time — an elastic collision between molecules would look the same going
+forward or backward. In the 1880s and 1890s, Boltzmann used molecules of gas
+as a model, along with the laws of probability, to show that there was no real
+conflict. The model showed that heat, no matter how it was introduced, would
+soon become evenly diffused throughout the gas, as the second law required.
+The cleverness of Boltzmann’s ideas however was that the model could also
+be used to show that two different kinds of gases would become thoroughly
+mixed even though the temperature of each gas may in fact be the same. Thus an
+analogy is really being made between the diffusion of heat and the diffusion of
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+120 Design and Nature III: Comparing Design in Nature with Science and Engineering
+two gases. The parallel between disorganisation and diffusion across basic
+distinct states was thus made. Quoting Klyce [9]
+“The reasoning used for mixing is very similar to that for the diffusion of
+heat, but there is an important difference. In the diffusion of heat, the
+entropy increase can be measured with the ratio of physical units, joules per
+degree. In the mixing of two kinds of gases already at the same temperature,
+if no heat is exchanged, the ratio of joules per degree — thermodynamic
+entropy — is irrelevant. The mixing process is related to the diffusion of
+heat only by analogy. Nevertheless, Boltzmann used a factor, now called
+Boltzmann's constant, to attach physical units to the latter situation. Now the
+word entropy has come to be applied to the mechanical mixing process, too.
+(Of course, Boltzmann's constant has a legitimate use — it relates the
+average kinetic energy of a molecule to its temperature.) ”
+To gain understanding of this type of model of logical entropy we illustrate by
+following the example of the entropy of a gas using the Boltzmann approach.
+2.3 Entropy of a gas – an example of ordered states
+The entropy of a gas is given by
+
+k
+(1)
+∑ f i ln f i ,
+W i
+where i : tabulates the state i This is usually a speed. Thus i = 10 could represent
+the state of molecules moving in the x - direction at say speed 10 m s-1. There can
+be negative i’s as well. W is the molecular weight (kg mol-1) and k is
+Boltzmann’s constant (k = 1.3805 x 10-23 J mol-1K-1), so that the entropy is in
+specific terms (energy per unit mass per degree, J kg-1 K-1)
+fi is the fraction of the parts (i.e. of the molecules) which are in state i - i.e.
+moving at a certain speed. The sum ∑ will add the terms filnfi for all the parts
+(speeds). The fi ’s are fractions between 0 and 1, so that the log function (ln ≡
+loge) will be negative and S will thus be positive.
+s =−
+
+Fraction fi
+
+Velocity i
+
+Figure 3:
+
+A particular non-equilibrium state (normally distributed).
+
+Suppose all the molecules are moving at 10 m s-1, then all of the parts of the
+system would be in state i = 10, so f10 would be 1 with the rest of the fi ’s at zero.
+Now for fi = 0 or 1, then fi lnfi = 0. For a particular state of non-equilibrium, there
+is roughly a normal distribution of possible states with a mode near one state (see
+fig. 3) so that with the maximum fi being less than unity, the loge of all the fi’s is
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+Design and Nature III: Comparing Design in Nature with Science and Engineering 121
+
+negative, and therefore ∑ fi ln fi is negative, so that s is positive. The more
+narrow the mode of fig. 3 (i.e. the more ordered the state), the smaller s becomes,
+so that in the limit of a zero thickness to the curve (meaning all the molecules are
+at a single speed i ) the limiting value of s is zero. This shows that entropy is
+small in ordered states which are near equilibrium.
+
+3
+
+Combined entropy changes?
+
+Prigogine [10] and others have proposed the addition of other entropies which
+could feed negative entropy into a given (open system). Consequently the total
+entropy is considered to be
+(2)
+ds = ds T + ds logical
+where ds is the total change in entropy, dsT is the change in thermodynamic
+entropy and dslogical is the change in entropy due to complexity ― that is
+Prigogine or logical entropy. The thermodynamic entropy dsT for a gas would be
+described by the Boltzmann law of eqn. (1), and for other types of energy
+exchange there will be an appropriate way of describing the internal energy,
+whether it be for electromagnetic, thermal, kinetic etc. While dsT tends to
+increase, the term dslogical can increase or decrease or remain zero (it is
+considered positive if entropy enters the system and negative if entropy leaves
+the system). The important implication of the additional logical entropy term is
+that then the total entropy change of any open system, ds, can be considered
+positive, negative, or zero. Systems for which ds < 0 (that is where entropy is
+decreasing) are said to be self-organizing (Cambel [11]), though this term needs
+care since the organising is only reflecting an ordering principle already present.
+A good example of dslogical would be the order inherent in crystals due to the
+atomic structure of a particular chemical compound. When such a compound is
+cooled to produce crystals, it is not the cooling itself which causes the crystals to
+occur, but the response to the precise molecular bonding within the material
+itself, and which is a definite function of the state variables. Often this is falsely
+used as an argument for increase in order (and thus an argument for increase in
+order) when in fact the ordering principle is latently already in the elements
+involved.
+The all important question that many have addressed is how to quantify
+dslogical for real systems, particularly in the life sciences. It has been suggested
+with some cogency that, on the basis of Shannon’s theory of information
+transmission3, one can express dslogical as an equivalent to the Boltzmann law of
+eqn. (1). This follows since Shannon’s theory is based simply on parcelling any
+information into a series of irreducible packets such that at the fundamental
+level, a digital switch is either ‘on’ or ‘off’. Each of these represents a state
+(rather like the discussion of molecule states in Boltzmann’s theory in
+section 2.3) and adding up all the probabilities of whether each state is present,
+gives
+N
+
+ds logical = − L ∑ p i ln p i
+i =1
+
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+(3)
+
+122 Design and Nature III: Comparing Design in Nature with Science and Engineering
+where L is a constant whose value is of course one of the major difficulties, since
+the number of possible states of any open system is not known (particularly as
+quantum states may also need to be invoked). Setting this at unity is often the
+assumption in recent studies [12, 13], but when dealing with arrangements of
+biological systems (such as the arrangement of DNA and the nucleotides,
+enzymes, ATP etc) the definition of what to include as a system state is moot.
+Thus Peter Coveney and Roger Highfield were being brutally honest when they
+stated in their classic book “The Arrow of Time” that [14]
+“There is, however, nothing to tell us how fine the [parcelling] should be.
+Entropies calculated in this way depend on the size-scale decided upon, in
+direct contradiction with thermodynamics in which entropy changes are
+fully objective”
+There is another major difficulty which concerns the definition of information.
+Gitt [15] has shown that the Shannon information concept is not really the main
+contributor, since this carries no concept of function [7] and purpose (termed
+‘apobetics’ in Gitt’s work) which is essential to any real information exchange in
+any working system. Consequently to define complexity as a gradual seepage in
+of ‘negative entropy’ is predicated on the notion that information can gradually
+increase from a random state. However in reality information is not defined in
+the coded sequence itself (such as the DNA nucleotide sequence of fig. 1) but
+rather (Gitt has shown) as five levels of signal statistics: (the Shannon level),
+code (syntax), expression (i.e. message at the semantic level), expected action
+(pragmatics) and intended result (apobetics). To summarise just two of these
+levels succinctly, the code used is not defined by the material it orders, and the
+expression (message) is not defined by the code it uses. Gitt argues that
+information has to be thought of as a third fundamental quantity which cannot be
+defined in terms of matter and energy.
+
+4 A new approach: entropy constrained by functional
+information
+We propose a different treatment which quantifies the effect of functional
+information in a system. This approach recognises Gitt’s important deductions
+concerning real information systems being impossible to define in terms of
+matter and energy alone. However one can recognise the effect of machines /
+information systems (that is teleonomy) being present in exactly the same way as
+a digitally controlled machine (i.e. a computer) is operated by software. The high
+level program controls a set of electronic switches on a micro chip which are set
+in a certain predefined pattern. Thus the logical entropy dslogical (the switching of
+the micro chip in the analogy) rather than being the source of the information
+should be thought of as the effect of information carrying systems. For a pure
+materialist there may be a natural reticence to adopting such an approach, but the
+evidence of the thermodynamics of living systems supports this.
+
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+Design and Nature III: Comparing Design in Nature with Science and Engineering 123
+
+4.1 Gibbs free energy
+An illustration of how an information bearing system relates to thermodynamic
+entropy is demonstrated by the code carrying DNA polymer (see fig. 1). As is
+well known, DNA is a double helix. The outer edges are formed of alternating
+ribose sugar molecules and phosphate groups. The two strands go in opposite
+directions either side of the nitrogenous bases which are like the inside rungs of a
+ladder. Adenine (A) on one side pairs with thymine (T), and on the other by
+hydrogen bonding, and cytosine (C) pairs with guanine (G). It has been noted
+that the C-G pair has three hydrogen bonds while the A-T pair has only two,
+which keeps them from pairing incorrectly. But this only dictates side-to-side
+pairing, but says nothing about the order along the molecule which is of course
+the all important digital information. There is no physical / chemical law which
+of itself stops other bonds forming which are not recognised in the DNA code,
+such as A-G or T-C though in terms of efficient use of space, the base pair A-T
+is identical in size to G-C which makes stacking very regular and precise. The
+point here is that it is the information contained in the DNA itself which causes
+particular bonds to be made, not the chemistry itself. Furthermore if one takes a
+solution of adenosine monophosphate (AMP) and a solution of thymidine
+monophsphate (TMP), and mix them together, they will not form base pairs A-T
+in solution because the bases will H-bond with water molecules. So this
+illustrates that for the information to exist at all in the system, there needs to be
+the correct thermodynamic energy relationships existing at the fundamental
+level, constrained by low levels of logical entropy (from high level information).
+This is best discussed in the context of the Gibbs free energy g which
+effectively takes away the unusable lost energy (associated with entropy) from
+the enthalpy h (which can be regarded as the total thermodynamic energy
+available). Thus
+(4)
+g = h − Ts ,
+It can be shown that for a chemical reaction, the change between the initial
+reactants to products is related to the change in the Gibbs free energy through
+RT
+(5a,b)
+∆g = −
+ln K , i.e. K = − exp(− W∆g RT )
+W
+where K is the reaction rate constant. Assuming that the reaction itself proceeds
+at constant temperature, then from equation (4) one can also state that
+(6)
+∆g = ∆h − T∆s ,
+and referring to base states (superscript 0 ) we have from equations (5a) and (6)
+− W∆h 0
+W∆s 0 .
+(7)
+ln K =
++
+RT
+R
+From eqn. (5b), for a reactant F going to product P, the probability p of any one
+state is given by
+exp(− W∆g RT )
+K
+(8)
+p=
+=
+1 + K 1 + exp(− W∆g RT )
+The equilibrium constant K governs the progress of the chemical reaction to
+completion. The K will be large where reactions have a maximum value of ∆s0
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+124 Design and Nature III: Comparing Design in Nature with Science and Engineering
+and a minimum value of ∆h0. Natural systems will tend to configurations where
+the entropy ∆s0 is greatest and the heat content ∆h0 is lowest. And we note that
+the lowest heat content configurations are generally associated with molecular
+configurations in which the atoms are bound most securely to one another. All
+chemical reactions without external influences will minimize g. Furthermore any
+natural process occurs spontaneously if and only if the associated change in
+Gibbs free energy g for the system is negative (∆g < 0). Likewise, a system
+reaches equilibrium when the associated change in g for the system is zero (∆g =
+0 ― and note that the probability p is then ½), and no spontaneous process will
+occur if the change in g is positive (∆g > 0). It is the information within the
+structure which enables a non-equilibrium chemistry to be maintained, such that
+low logical entropy (∆slogical) is added to the fundamental molecular structure.
+Another very clear example is the famous Urey-Miller experiment which
+produced left handed and right handed chirality amino acids by firing sparks
+across a reducing mixture of methane, ammonia, water and hydrogen. The
+mixture was racemic in left handed and right handed chirality whereas in life
+systems one requires only left handed amino acids. The probability of any one
+state is in fact ½ since there is equilibrium between the two possible end states.
+Only by driving the net Gibbs free energy between the two end states to an
+impossible infinite value (that is impossible without an information-rich
+machine) could one get an entirely left handed system which is what life systems
+actually do have. However if we consider the information in the system as being
+the source and the logical entropy as being the effect, then there is a logical
+coherency in the argument. (In this case from eqn. (6), ∆g is large and positive
+precisely because ∆slogical is large and negative).
+Consequently to suggest that reactions on their own can be moved against the
+free energy principle is not true, since they could not be sustained. The DNA
+molecule along with all the nucleotides and other polymers could not change
+radically such that a low entropy situation would emerge. To alter the DNA
+constituents from one stable state say to another representative state with a
+distinct improvement cannot be done by natural means alone without additional
+information. The thermodynamic laws are against such a procedure.
+Dickerson hoped for a different physics when he stated [16]
+“Through some gradual means, about which we can only speculate, an
+association of nucleic acids as the archival material with protein as the
+working catalyst evolved into the complex genetic transcription and
+translation machinery that all forms of life exhibit today”
+
+5
+
+Conclusions
+
+In this paper we have considered the concept of logical entropy as a parallel to
+the Boltzmann probability formula for system states. We have then considered
+the role of information in reducing at a fundamental level the logical entropy and
+concluded that rather than regarding negative entropy as being a source of
+information at the fundamental level, it is far more self-consistent to regard the
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+Design and Nature III: Comparing Design in Nature with Science and Engineering 125
+
+information defined in terms of a source from which negative logical entropy is
+derived at the molecular level, and which can be quantified using Shannon
+principles.
+It has often been asserted that the logical entropy of an open system could
+reduce through chance exchanges of that system with its environment. By
+considering the Gibbs free energy connecting two possible states, it is evident
+that this involves thermodynamic hurdles which demand effectively a different
+physics. Self-organisation (so called) only takes place when existing information
+is already inherent in the system and not vice versa. In an open system, energy
+(such as from the sun) may increase the local temperature difference (and thus
+increase the potential for useful work that can be done locally), but without a
+machine (that is, a device which is made or programmed to use the available
+energy), there is still no possibility of the self-organisation of matter. There has
+to be previously written information or order (often termed “teleonomy”) for
+passive, non-living chemicals to respond and become active. Thus the following
+summary statement applies to all known systems:
+Energy + Information → Locally reduced entropy (Increase of order)
+(or teleonomy)
+with the corollary:
+Matter and Energy alone
+
+Decrease in Entropy
+
+Another way of saying this is that for an open system, energy must be directed to
+be of any use.
+In this paper we have argued that for living systems, rather than regarding
+negative entropy as a quantity generated within, one should regard the
+information as being the cause and the logical entropy reduction being the result.
+That which is dead (such as a stick or leaf from a tree) has no information or
+teleonomy within it to convert the sun’s energy to useful work. Indeed it will
+simply heat up and entropy will increase. However, a living plant has
+information within it, such that the energy from the sun is absorbed (along with
+carbon dioxide and water) by its leaves, through photosynthesis. The chlorophyll
+of the leaf enables such a biochemical reaction to take place. To quote WilderSmith [17, p.59],
+“..raw matter within a closed system, plus a teleonomic machine, might yield
+auto-organisation derived from endogenous [that which comes from within]
+energy. Raw matter within an open system, plus a teleonomic machine may
+yield auto-organisation derived from endogenous and/or exogenous [that
+which comes from without] energy. Within both open and closed systems,
+however, a mechanism (machine, teleonomy, know-how) is essential if any
+auto-organisation is to result.”
+
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+126 Design and Nature III: Comparing Design in Nature with Science and Engineering
+
+References
+[1]
+[2]
+
+[3]
+[4]
+[5]
+[6]
+[7]
+[8]
+[9]
+[10]
+[11]
+[12]
+[13]
+[14]
+[15]
+[16]
+[17]
+
+Watson, J. D. and Crick, F. H. C. “Molecular structure of Nucleic Acids”,
+Nature 171, 737-738 (1953).
+See for example Nicolis, G. and I. Prigogine. Exploring Complexity: An
+Introduction, Freeman, New York, (1989) and the useful web site where
+these matters of non-equilibrium thermodynamics are discussed:
+http://www.schuelers.com/ChaosPsyche/part_1_9.htm (accessed 2006).
+Shannon, C.E., “The Mathematical Theory of Communication”, The Bell
+System Technical Journal, Vol. 27, pp. 379–423, 623–656, July, October,
+(1948).
+Dawkins, R. “The Information Challenge”, pp. 107-122 (quote is from pp.
+120-121), Chapter 2.3 of A Devil’s Chaplain; Selected Essays by Richard
+Dawkins, Ed. Latha Menon, Phoenix, 2003.
+Jackson, S.P., “Sensing and repairing DNA double strand breaks”,
+Carcinogenesis, Vol. 23, No. 5, 687-696, OUP, May 2002.
+de Laat W. L., Jaspers, N.G.J., and Hoeijmakers, J.H.J., “Molecular
+mechanism of nucleotide excision repair”, Genes and Development, Vol.
+13, No. 7, pp. 768-785, April, 1999.
+Meyer, S.C., “The origin of biological information and the higher
+taxonomic categories”, Proceedings of the Biological Society of
+Washington, 117(2), 213-239, 2004.
+Conway Morris, S., “Evolution : bringing molecules into the fold”, Cell
+100, 1-11, 2000.
+Klyce, B. “The second law of thermodynamics”, essay at
+http://www.panspermia.org/seconlaw.htm (accessed 2006).
+Nicolis G. and Prigogine, I., Exploring complexity: An introduction, W.H.
+Freeman, New York, 1989.
+Çambel, A. B., Applied chaos theory: A paradigm for complexity,
+Academic Press, Boston: 1993.
+Wicken, J.S., Evolution, Thermodynamics and Information: Extending the
+Darwinian Program, Oxford University Press, 1987.
+Penrose, R., The Emperor's New Mind, Oxford University Press, 1989.
+Coveney, P. and Highfield, R., The Arrow of Time, Ballentine Books,
+1990. p 176-177.
+Gitt, W, “Information: the third fundamental quantity”, Siemens Review,
+Vol 56, Part 6, pp.36-41, 1989.
+Dickerson, R.E. “Chemical Evolution and the origin of life”, Scientific
+American 239(9), 73, 1978.
+Wilder-Smith, A.E., “The Natural Sciences know nothing of evolution”,
+Master Books, San Diego, California 1981. See particularly chapter 4
+“The Genesis of Biological Information”. Bracketed material added.
+
+WIT Transactions on Ecology and the Environment, Vol 87, © 2006 WIT Press
+www.witpress.com, ISSN 1743-3541 (on-line)
+
+

@@ -604,9 +604,9 @@
             
             // Charger un vrai modèle 3D avec GLTFLoader
             const loader = new THREE.GLTFLoader();
-            const modelPath = type === 'cesium' ? 'CesiumMan.glb' : 
-                            type === 'figure' ? 'RiggedFigure.glb' : 
-                            'RiggedSimple.glb';
+            const modelPath = type === 'cesium' ? '../../assets/models/CesiumMan.glb' :
+                            type === 'figure' ? '../../assets/models/RiggedFigure.glb' :
+                            '../../assets/models/RiggedSimple.glb';
             
             loader.load(
                 modelPath,
