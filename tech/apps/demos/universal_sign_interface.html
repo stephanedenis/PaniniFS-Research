@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Universelle - Dhātu & Langues Signées</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+        }
+        
+        #dhatu-panel {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            width: 300px;
+            height: calc(100vh - 20px);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff6600;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        #canvas-area {
+            flex: 1;
+            margin-left: 340px;
+            position: relative;
+        }
+        
+        #language-selector {
+            position: fixed;
+            right: 10px;
+            top: 10px;
+            width: 250px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+        }
+        
+        .panel-title {
+            color: #ff6600;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
+        
+        .dhatu-item {
+            background: rgba(255, 102, 0, 0.2);
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dhatu-item:hover {
+            background: rgba(255, 102, 0, 0.4);
+            transform: translateX(5px);
+        }
+        
+        .dhatu-item.active {
+            background: rgba(255, 102, 0, 0.6);
+            border-color: #ffaa44;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+        }
+        
+        .dhatu-name {
+            font-weight: bold;
+            color: #ffaa44;
+            font-size: 14px;
+        }
+        
+        .dhatu-concept {
+            color: #ffffff;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .dhatu-frequency {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            color: #ffaa44;
+        }
+        
+        .language-group {
+            margin: 15px 0;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #00ff88;
+        }
+        
+        .language-title {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        
+        .language-btn {
+            background: linear-gradient(145deg, #1a4a3a, #0d2d1d);
+            color: #ffffff;
+            border: 1px solid #00ff88;
+            padding: 6px 12px;
+            margin: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .language-btn:hover {
+            background: linear-gradient(145deg, #2a6a4a, #1d4d2d);
+            transform: scale(1.05);
+        }
+        
+        .language-btn.active {
+            background: linear-gradient(145deg, #44aa77, #337755);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        #status-bar {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dhatu-visualization {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ff6600;
+            backdrop-filter: blur(15px);
+        }
+        
+        .dhatu-large {
+            font-size: 48px;
+            color: #ff6600;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+        }
+        
+        .dhatu-description {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+        
+        .dhatu-examples {
+            font-size: 14px;
+            color: #cccccc;
+            font-style: italic;
+        }
+        
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .alphabet-btn {
+            background: rgba(0, 255, 136, 0.3);
+            border: 1px solid #00ff88;
+            color: #ffffff;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .alphabet-btn:hover {
+            background: rgba(0, 255, 136, 0.5);
+            transform: scale(1.1);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <!-- Panel des Dhātu (cœur du système) -->
+        <div id="dhatu-panel">
+            <div class="panel-title">🧬 DHĀTU UNIVERSELS</div>
+            <div class="dhatu-item" onclick="selectDhatu('RELATE')" data-dhatu="RELATE">
+                <div class="dhatu-frequency">57</div>
+                <div class="dhatu-name">RELATE</div>
+                <div class="dhatu-concept">Relations spatiales, possession</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('MODAL')" data-dhatu="MODAL">
+                <div class="dhatu-frequency">35</div>
+                <div class="dhatu-name">MODAL</div>
+                <div class="dhatu-concept">Modalité, négation, possibilité</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('EXIST')" data-dhatu="EXIST">
+                <div class="dhatu-frequency">20</div>
+                <div class="dhatu-name">EXIST</div>
+                <div class="dhatu-concept">Existence, temporalité</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('EVAL')" data-dhatu="EVAL">
+                <div class="dhatu-frequency">20</div>
+                <div class="dhatu-name">EVAL</div>
+                <div class="dhatu-concept">Évaluation, quantification</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('COMM')" data-dhatu="COMM">
+                <div class="dhatu-frequency">19</div>
+                <div class="dhatu-name">COMM</div>
+                <div class="dhatu-concept">Communication, transmission</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('CAUSE')" data-dhatu="CAUSE">
+                <div class="dhatu-frequency">20</div>
+                <div class="dhatu-name">CAUSE</div>
+                <div class="dhatu-concept">Causalité, agent-action</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('ITER')" data-dhatu="ITER">
+                <div class="dhatu-frequency">20</div>
+                <div class="dhatu-name">ITER</div>
+                <div class="dhatu-concept">Répétition, séquentialité</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('DECIDE')" data-dhatu="DECIDE">
+                <div class="dhatu-frequency">15</div>
+                <div class="dhatu-name">DECIDE</div>
+                <div class="dhatu-concept">Choix, conditions</div>
+            </div>
+            <div class="dhatu-item" onclick="selectDhatu('FEEL')" data-dhatu="FEEL">
+                <div class="dhatu-frequency">12</div>
+                <div class="dhatu-name">FEEL</div>
+                <div class="dhatu-concept">Émotions, attitudes</div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 10px; background: rgba(255, 102, 0, 0.1); border-radius: 8px;">
+                <div style="color: #ffaa44; font-size: 12px; font-weight: bold;">COUVERTURE UNIVERSELLE</div>
+                <div style="color: #ffffff; font-size: 11px;">92% sur 20 langues testées</div>
+                <div style="color: #cccccc; font-size: 10px;">Validation cross-linguistique</div>
+            </div>
+        </div>
+        
+        <!-- Zone de visualisation 3D -->
+        <div id="canvas-area">
+            <div class="dhatu-visualization" id="dhatu-display">
+                <div class="dhatu-large" id="current-dhatu">RELATE</div>
+                <div class="dhatu-description" id="dhatu-desc">Relations spatiales et possession</div>
+                <div class="dhatu-examples" id="dhatu-examples">
+                    Manifestations: "dans, sur, de, avec" • Spatial: in, on, above • Possession: ownership, belonging
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sélecteur de langues signées -->
+        <div id="language-selector">
+            <div class="panel-title">🌍 LANGUES SIGNÉES</div>
+            
+            <!-- Amérique du Nord -->
+            <div class="language-group">
+                <div class="language-title">Amérique du Nord</div>
+                <button class="language-btn active" onclick="selectLanguage('LSQ')">LSQ (Québec)</button>
+                <button class="language-btn" onclick="selectLanguage('ASL')">ASL (USA)</button>
+                <button class="language-btn" onclick="selectLanguage('LSM')">LSM (Mexique)</button>
+            </div>
+            
+            <!-- Europe -->
+            <div class="language-group">
+                <div class="language-title">Europe</div>
+                <button class="language-btn" onclick="selectLanguage('LSF')">LSF (France)</button>
+                <button class="language-btn" onclick="selectLanguage('BSL')">BSL (Britannique)</button>
+                <button class="language-btn" onclick="selectLanguage('DGS')">DGS (Allemagne)</button>
+                <button class="language-btn" onclick="selectLanguage('LIS')">LIS (Italie)</button>
+                <button class="language-btn" onclick="selectLanguage('SSL')">SSL (Suède)</button>
+                <button class="language-btn" onclick="selectLanguage('NGT')">NGT (Pays-Bas)</button>
+                <button class="language-btn" onclick="selectLanguage('LSE')">LSE (Espagne)</button>
+            </div>
+            
+            <!-- Asie -->
+            <div class="language-group">
+                <div class="language-title">Asie</div>
+                <button class="language-btn" onclick="selectLanguage('JSL')">JSL (Japon)</button>
+                <button class="language-btn" onclick="selectLanguage('CSL')">CSL (Chine)</button>
+                <button class="language-btn" onclick="selectLanguage('KSL')">KSL (Corée)</button>
+                <button class="language-btn" onclick="selectLanguage('IPSL')">IPSL (Indo-Pakistan)</button>
+                <button class="language-btn" onclick="selectLanguage('TSL')">TSL (Thaïlande)</button>
+            </div>
+            
+            <!-- Océanie -->
+            <div class="language-group">
+                <div class="language-title">Océanie</div>
+                <button class="language-btn" onclick="selectLanguage('Auslan')">Auslan (Australie)</button>
+                <button class="language-btn" onclick="selectLanguage('NZSL')">NZSL (N-Zélande)</button>
+            </div>
+            
+            <!-- Afrique -->
+            <div class="language-group">
+                <div class="language-title">Afrique</div>
+                <button class="language-btn" onclick="selectLanguage('SASL')">SASL (Afr. Sud)</button>
+                <button class="language-btn" onclick="selectLanguage('LST')">LST (Tunisie)</button>
+            </div>
+            
+            <!-- Phrases communes internationales -->
+            <div class="language-group">
+                <div class="language-title">Phrases Communes</div>
+                <button class="language-btn" onclick="performPhrase('hello')">Bonjour/Hello</button>
+                <button class="language-btn" onclick="performPhrase('thank_you')">Merci/Thank you</button>
+                <button class="language-btn" onclick="performPhrase('how_are_you')">Comment allez-vous?</button>
+                <button class="language-btn" onclick="performPhrase('i_love_you')">Je vous aime</button>
+                <button class="language-btn" onclick="performPhrase('goodbye')">Au revoir/Goodbye</button>
+                <button class="language-btn" onclick="performPhrase('please')">S'il vous plaît</button>
+            </div>
+            
+            <!-- Contrôles modèles 3D -->
+            <div class="language-group">
+                <div class="language-title">Modèles 3D Complets</div>
+                <button class="language-btn" onclick="loadHandModel('cesium')">� CesiumMan</button>
+                <button class="language-btn" onclick="loadHandModel('figure')">👤 Figure Riggée</button>
+                <button class="language-btn" onclick="loadHandModel('simple')">� Simple Riggé</button>
+                <button class="language-btn" onclick="loadProceduralModel('both')">� Mains Proc.</button>
+                <button class="language-btn" onclick="loadProceduralModel('skeleton')">💀 Squelette</button>
+            </div>
+            
+            <!-- Alphabet universel -->
+            <div class="language-group">
+                <div class="language-title">Alphabet (current: LSQ)</div>
+                <div class="alphabet-grid">
+                    <button class="alphabet-btn" onclick="performLetter('A')">A</button>
+                    <button class="alphabet-btn" onclick="performLetter('B')">B</button>
+                    <button class="alphabet-btn" onclick="performLetter('C')">C</button>
+                    <button class="alphabet-btn" onclick="performLetter('D')">D</button>
+                    <button class="alphabet-btn" onclick="performLetter('E')">E</button>
+                    <button class="alphabet-btn" onclick="performLetter('F')">F</button>
+                    <button class="alphabet-btn" onclick="performLetter('G')">G</button>
+                    <button class="alphabet-btn" onclick="performLetter('H')">H</button>
+                    <button class="alphabet-btn" onclick="performLetter('I')">I</button>
+                    <button class="alphabet-btn" onclick="performLetter('J')">J</button>
+                    <button class="alphabet-btn" onclick="performLetter('K')">K</button>
+                    <button class="alphabet-btn" onclick="performLetter('L')">L</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Barre de statut -->
+    <div id="status-bar">
+        Dhātu: RELATE • Langue: LSQ (Québec) • Couverture: 92% universelle
+    </div>
+
+    <!-- Scripts Three.js et logique -->
+    <script src="../../assets/vendor/three.min.js"></script>
+    <script src="../../assets/vendor/GLTFLoader.js"></script>
+    <script>
+        // Configuration globale - ACCESSIBLE GLOBALEMENT
+        window.scene = null;
+        window.camera = null;
+        window.renderer = null;
+        window.mixer = null;
+        window.clock = null;
+        window.currentHands = { left: null, right: null };
+        window.currentDhatu = 'RELATE';
+        window.currentLanguage = 'LSQ';
+        window.handControllers = { left: null, right: null };
+        window.anatomyHelpers = [];
+        
+        // Debug logs
+        function debugLog(message) {
+            console.log(`🔧 DEBUG: ${message}`);
+        }
+        
+        // Modèles 3D - utilisation de géométries procédurales
+        const handModels = {
+            'basic_hand': 'procedural',
+            'skeleton_hand': 'wireframe',
+            'full_body': 'composite'
+        };
+        
+        // Données des dhātu avec descriptions complètes
+        const dhatuData = {
+            'RELATE': {
+                name: 'RELATE',
+                concept: 'Relations spatiales et possession',
+                examples: 'Manifestations: "dans, sur, de, avec" • Spatial: in, on, above • Possession: ownership, belonging',
+                frequency: 57,
+                universality: '19/20 langues'
+            },
+            'MODAL': {
+                name: 'MODAL',
+                concept: 'Modalité, négation, possibilité',
+                examples: 'Peut-être, impossible, certainement • can, must, should • nécessité, possibilité',
+                frequency: 35,
+                universality: '20/20 langues'
+            },
+            'EXIST': {
+                name: 'EXIST',
+                concept: 'Existence, temporalité',
+                examples: 'Être, exister, maintenant • is, was, will be • présence, absence temporelle',
+                frequency: 20,
+                universality: '20/20 langues'
+            },
+            'EVAL': {
+                name: 'EVAL',
+                concept: 'Évaluation, quantification',
+                examples: 'Plus, moins, égal • big, small, many • comparaison, mesure, quantité',
+                frequency: 20,
+                universality: '20/20 langues'
+            },
+            'COMM': {
+                name: 'COMM',
+                concept: 'Communication, transmission',
+                examples: 'Dire, raconter, entendre • speak, tell, report • échange informationnel',
+                frequency: 19,
+                universality: '19/20 langues'
+            },
+            'CAUSE': {
+                name: 'CAUSE',
+                concept: 'Causalité, agent-action',
+                examples: 'Faire, causer, agir • make, do, create • structure agent-action-objet',
+                frequency: 20,
+                universality: '18/20 langues'
+            },
+            'ITER': {
+                name: 'ITER',
+                concept: 'Répétition, séquentialité',
+                examples: 'Répéter, encore, suivant • again, next, loop • progression temporelle',
+                frequency: 20,
+                universality: '17/20 langues'
+            },
+            'DECIDE': {
+                name: 'DECIDE',
+                concept: 'Choix, conditions',
+                examples: 'Si, alors, choisir • if, when, choose • structures conditionnelles',
+                frequency: 15,
+                universality: '16/20 langues'
+            },
+            'FEEL': {
+                name: 'FEEL',
+                concept: 'Émotions, attitudes',
+                examples: 'Aimer, détester, ressentir • love, hate, feel • dimension affective',
+                frequency: 12,
+                universality: '15/20 langues'
+            }
+        };
+        
+        // Initialisation
+        function init() {
+            debugLog('Initialisation du système...');
+            try {
+                if (typeof THREE === 'undefined') {
+                    console.error('❌ THREE.js non chargé !');
+                    return;
+                }
+                debugLog('Three.js détecté: ' + THREE.REVISION);
+                
+                initThreeJS();
+                updateDhatuDisplay('RELATE');
+                updateStatus();
+                debugLog('Initialisation terminée avec succès');
+            } catch (error) {
+                console.error('❌ Erreur initialisation:', error);
+            }
+        }
+        
+        function initThreeJS() {
+            debugLog('Initialisation Three.js...');
+            
+            window.scene = new THREE.Scene();
+            window.scene.name = 'MainScene';
+            
+            const canvasArea = document.getElementById('canvas-area');
+            if (!canvasArea) {
+                console.error('❌ Zone canvas non trouvée !');
+                return;
+            }
+            
+            window.camera = new THREE.PerspectiveCamera(75, canvasArea.clientWidth / canvasArea.clientHeight, 0.1, 1000);
+            window.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            window.renderer.setSize(canvasArea.clientWidth, canvasArea.clientHeight);
+            window.renderer.shadowMap.enabled = true;
+            window.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            window.renderer.setClearColor(0x000000, 0.1);
+            
+            canvasArea.appendChild(window.renderer.domElement);
+            debugLog('Canvas ajouté au DOM');
+            
+            // Éclairage cinématique
+            setupAdvancedLighting();
+            
+            // Chargement modèle par défaut
+            // Chargement modèle par défaut selon disponibilité GLTFLoader
+            debugLog('Chargement modèle par défaut...');
+            if (typeof THREE.GLTFLoader !== 'undefined') {
+                debugLog('GLTFLoader disponible - chargement CesiumMan');
+                loadHandModel('cesium');
+            } else {
+                debugLog('GLTFLoader non disponible - modèle procédural');
+                loadProceduralModel('right');
+            }
+            
+            window.camera.position.set(0, 1, 3);
+            window.camera.lookAt(0, 0, 0);
+            
+            window.clock = new THREE.Clock();
+            
+            animate();
+            debugLog('Animation démarrée');
+        }
+        
+        function setupAdvancedLighting() {
+            debugLog('Configuration éclairage...');
+            
+            const ambientLight = new THREE.AmbientLight(0x404080, 0.6);
+            window.scene.add(ambientLight);
+            
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            keyLight.position.set(3, 8, 5);
+            keyLight.castShadow = true;
+            keyLight.shadow.mapSize.width = 2048;
+            keyLight.shadow.mapSize.height = 2048;
+            window.scene.add(keyLight);
+            
+            const fillLight = new THREE.DirectionalLight(0x88aaff, 0.6);
+            fillLight.position.set(-3, 5, -2);
+            window.scene.add(fillLight);
+            
+            const rimLight = new THREE.DirectionalLight(0xff8844, 0.4);
+            rimLight.position.set(0, 2, -8);
+            window.scene.add(rimLight);
+            
+            debugLog(`Éclairage configuré - ${window.scene.children.length} lumières ajoutées`);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Animation de rotation douce pour les objets 3D
+            if (scene && scene.children.length > 3) {
+                scene.children.forEach(child => {
+                    if (child.isMesh && child.name.includes('hand')) {
+                        child.rotation.y += 0.005;
+                    }
+                });
+            }
+            
+            if (window.renderer && window.scene && window.camera) {
+                window.renderer.render(window.scene, window.camera);
+            }
+        }
+        
+        function loadHandModel(type) {
+            debugLog(`Chargement modèle: ${type}`);
+            updateStatus(`🔄 Chargement du modèle 3D ${type}...`);
+            
+            // Supprimer l'ancien modèle s'il existe
+            const existingModel = window.scene.getObjectByName(`human_model_${type}`);
+            if (existingModel) {
+                window.scene.remove(existingModel);
+                debugLog(`Ancien modèle ${type} supprimé`);
+            }
+            
+            // Charger un vrai modèle 3D avec GLTFLoader
+            const loader = new THREE.GLTFLoader();
+            const modelPath = type === 'cesium' ? 'CesiumMan.glb' : 
+                            type === 'figure' ? 'RiggedFigure.glb' : 
+                            'RiggedSimple.glb';
+            
+            loader.load(
+                modelPath,
+                (gltf) => {
+                    debugLog(`Modèle ${modelPath} chargé avec succès`);
+                    
+                    const model = gltf.scene;
+                    model.name = `human_model_${type}`;
+                    
+                    // Centrer et redimensionner le modèle
+                    const box = new THREE.Box3().setFromObject(model);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    
+                    // Normaliser la taille
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 3 / maxDim; // Taille normalisée à 3 unités
+                    model.scale.setScalar(scale);
+                    
+                    // Centrer le modèle
+                    model.position.sub(center.multiplyScalar(scale));
+                    model.position.y += 1; // Ajuster la hauteur
+                    
+                    // Ajouter les ombres
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+                    
+                    // Stocker l'animation mixer si disponible
+                    if (gltf.animations && gltf.animations.length > 0) {
+                        const mixer = new THREE.AnimationMixer(model);
+                        const action = mixer.clipAction(gltf.animations[0]);
+                        action.play();
+                        
+                        // Stocker le mixer pour l'animation
+                        model.userData.mixer = mixer;
+                        debugLog(`Animation ${gltf.animations[0].name} activée`);
+                    }
+                    
+                    window.scene.add(model);
+                    debugLog(`Modèle ${type} ajouté à la scène`);
+                    
+                    updateStatus(`✅ Modèle 3D ${type} chargé avec succès`);
+                    
+                    // Forcer un rendu
+                    if (window.renderer && window.scene && window.camera) {
+                        window.renderer.render(window.scene, window.camera);
+                        debugLog('Rendu forcé après chargement modèle');
+                    }
+                },
+                (progress) => {
+                    const percent = Math.round((progress.loaded / progress.total) * 100);
+                    updateStatus(`📥 Chargement ${type}: ${percent}%`);
+                },
+                (error) => {
+                    console.error(`Erreur chargement ${modelPath}:`, error);
+                    updateStatus(`❌ Erreur chargement ${type}`);
+                    
+                    // Fallback: garder l'ancien système si le chargement échoue
+                    loadProceduralModel(type);
+                }
+            );
+        }
+        
+        function loadProceduralModel(type) {
+            debugLog(`Chargement modèle procédural: ${type}`);
+            updateStatus(`Chargement modèle 3D: ${type}`);
+            
+            // Nettoyer les modèles existants
+            clearCurrentHands();
+            
+            try {
+                if (type === 'both') {
+                    loadSingleHand('left', -1);
+                    loadSingleHand('right', 1);
+                } else if (type === 'right') {
+                    loadSingleHand('right', 0);
+                } else if (type === 'skeleton') {
+                    loadSkeletonHand();
+                }
+                debugLog(`Modèle ${type} chargé avec succès`);
+            } catch (error) {
+                console.error(`❌ Erreur chargement modèle ${type}:`, error);
+            }
+        }
+        
+        function loadSingleHand(side, positionX) {
+            debugLog(`Création main ${side} à position ${positionX}`);
+            
+            // Création d'une main procédurale avancée
+            const handGroup = new THREE.Group();
+            handGroup.name = `hand_${side}`;
+            
+            // Géométries pour les doigts avec plus de détails
+            const fingerGeometry = new THREE.CylinderGeometry(0.02, 0.03, 0.15, 8);
+            const thumbGeometry = new THREE.CylinderGeometry(0.025, 0.035, 0.12, 8);
+            const palmGeometry = new THREE.BoxGeometry(0.15, 0.05, 0.2);
+            
+            // Matériaux réalistes avec couleur visible
+            const skinMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffcba4,
+                shininess: 30,
+                transparent: false
+            });
+            
+            // Construction de la paume - VISIBLE
+            const palm = new THREE.Mesh(palmGeometry, skinMaterial);
+            palm.name = 'palm';
+            palm.castShadow = true;
+            palm.receiveShadow = true;
+            handGroup.add(palm);
+            debugLog('Paume ajoutée');
+            
+            // Construction des doigts avec os - VISIBLES
+            const fingers = ['thumb', 'index', 'middle', 'ring', 'pinky'];
+            fingers.forEach((fingerName, i) => {
+                const finger = new THREE.Mesh(
+                    fingerName === 'thumb' ? thumbGeometry : fingerGeometry, 
+                    skinMaterial
+                );
+                finger.name = fingerName;
+                finger.position.set((i - 2) * 0.04, 0.05, fingerName === 'thumb' ? -0.05 : 0.1);
+                finger.castShadow = true;
+                finger.receiveShadow = true;
+                
+                // Ajouter des articulations visibles
+                const jointMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600 });
+                const joint = new THREE.Mesh(new THREE.SphereGeometry(0.015), jointMaterial);
+                joint.position.copy(finger.position);
+                joint.position.y += 0.07;
+                handGroup.add(joint);
+                
+                handGroup.add(finger);
+                debugLog(`Doigt ${fingerName} ajouté`);
+            });
+            
+            // Position et échelle pour visibilité
+            handGroup.position.set(positionX, 0, 0);
+            handGroup.scale.set(3, 3, 3); // Plus grand pour être visible
+            
+            window.scene.add(handGroup);
+            currentHands[side] = handGroup;
+            
+            // Créer contrôleur pour gestes
+            handControllers[side] = new HandController(handGroup, side);
+            
+            debugLog(`Main ${side} créée avec ${handGroup.children.length} éléments`);
+            updateStatus(`✅ Main ${side} chargée avec succès`);
+            
+            // Forcer un rendu pour vérifier la visibilité
+            if (window.renderer && window.scene && window.camera) {
+                window.renderer.render(window.scene, window.camera);
+                debugLog('Rendu forcé après création main');
+            }
+        }
+        
+        function loadSkeletonHand() {
+            const skeletonGroup = new THREE.Group();
+            
+            const boneMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xeeeeee,
+                wireframe: true
+            });
+            
+            // Structure osseuse simplifiée
+            const boneGeometry = new THREE.CylinderGeometry(0.01, 0.01, 0.12, 6);
+            
+            for (let i = 0; i < 5; i++) {
+                const bone = new THREE.Mesh(boneGeometry, boneMaterial);
+                bone.position.set((i - 2) * 0.03, 0, 0);
+                skeletonGroup.add(bone);
+            }
+            
+            skeletonGroup.position.set(0, 0, 0);
+            skeletonGroup.scale.set(2, 2, 2);
+            window.scene.add(skeletonGroup);
+            
+            currentHands.right = skeletonGroup;
+            updateStatus('✅ Modèle squelette chargé');
+        }
+        
+        function loadFullBody() {
+            // Corps basique pour contexte
+            const bodyGroup = new THREE.Group();
+            
+            const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x8888aa });
+            
+            // Torse
+            const torso = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.3, 0.4, 1.2, 8),
+                bodyMaterial
+            );
+            torso.position.y = 0;
+            bodyGroup.add(torso);
+            
+            // Bras
+            const armGeometry = new THREE.CylinderGeometry(0.08, 0.1, 0.8, 6);
+            const leftArm = new THREE.Mesh(armGeometry, bodyMaterial);
+            leftArm.position.set(-0.5, 0.2, 0);
+            leftArm.rotation.z = 0.3;
+            
+            const rightArm = new THREE.Mesh(armGeometry, bodyMaterial);
+            rightArm.position.set(0.5, 0.2, 0);
+            rightArm.rotation.z = -0.3;
+            
+            bodyGroup.add(leftArm, rightArm);
+            
+            // Ajouter les mains au bout des bras
+            loadSingleHand('left', -0.8);
+            loadSingleHand('right', 0.8);
+            
+            window.scene.add(bodyGroup);
+            updateStatus('✅ Corps complet chargé');
+        }
+        
+        function clearCurrentHands() {
+            Object.values(currentHands).forEach(hand => {
+                if (hand) scene.remove(hand);
+            });
+            currentHands = { left: null, right: null };
+        }
+        
+        // Contrôleur de main avancé
+        class HandController {
+            constructor(handMesh, side) {
+                this.hand = handMesh;
+                this.side = side;
+                this.fingers = {};
+                
+                // Mapper les doigts
+                this.hand.children.forEach(child => {
+                    if (child.name !== 'palm') {
+                        this.fingers[child.name] = child;
+                    }
+                });
+            }
+            
+            setFingerPose(fingerName, rotation) {
+                if (this.fingers[fingerName]) {
+                    this.fingers[fingerName].rotation.x = rotation.x || 0;
+                    this.fingers[fingerName].rotation.y = rotation.y || 0;
+                    this.fingers[fingerName].rotation.z = rotation.z || 0;
+                }
+            }
+            
+            performGesture(gestureData) {
+                Object.entries(gestureData).forEach(([finger, pose]) => {
+                    this.setFingerPose(finger, pose);
+                });
+            }
+        }
+        
+        function performPhrase(phraseKey) {
+            const phrases = {
+                'hello': {
+                    gesture: { thumb: {x: 0, y: 0, z: 0.8}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
+                    dhatu: 'COMM',
+                    description: 'Salutation universelle - Communication sociale'
+                },
+                'thank_you': {
+                    gesture: { thumb: {x: 0.5, y: 0, z: 0.3}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
+                    dhatu: 'EVAL',
+                    description: 'Gratitude - Évaluation positive'
+                },
+                'how_are_you': {
+                    gesture: { thumb: {x: 0, y: 0, z: 0.8}, index: {x: 0, y: 0.3, z: 0}, middle: {x: 1.4, y: 0, z: 0}, ring: {x: 1.4, y: 0, z: 0}, pinky: {x: 1.4, y: 0, z: 0} },
+                    dhatu: 'COMM',
+                    description: 'Question sur l\'état - Communication interrogative'
+                },
+                'i_love_you': {
+                    gesture: { thumb: {x: 0, y: 0, z: 0.8}, index: {x: 0, y: 0, z: 0}, middle: {x: 1.4, y: 0, z: 0}, ring: {x: 1.4, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
+                    dhatu: 'FEEL',
+                    description: 'Expression d\'amour - Émotion affective'
+                },
+                'goodbye': {
+                    gesture: { thumb: {x: 0, y: 0, z: 0}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
+                    dhatu: 'COMM',
+                    description: 'Au revoir - Communication de départ'
+                },
+                'please': {
+                    gesture: { thumb: {x: 0.3, y: 0, z: 0.2}, index: {x: 1.2, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
+                    dhatu: 'MODAL',
+                    description: 'Demande polie - Modalité de politesse'
+                }
+            };
+            
+            const phrase = phrases[phraseKey];
+            if (phrase && handControllers.right) {
+                handControllers.right.performGesture(phrase.gesture);
+                selectDhatu(phrase.dhatu);
+                updateStatus(`${phrase.description} • Dhātu: ${phrase.dhatu} • Langue: ${currentLanguage}`);
+            }
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Animation de rotation douce pour les objets 3D
+            if (scene.children.length > 2) {
+                scene.children.forEach(child => {
+                    if (child.isMesh) {
+                        child.rotation.y += 0.005;
+                    }
+                });
+            }
+            
+            window.renderer.render(window.scene, window.camera);
+        }
+        
+        function selectDhatu(dhatuName) {
+            // Mise à jour visuelle des boutons
+            document.querySelectorAll('.dhatu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-dhatu="${dhatuName}"]`).classList.add('active');
+            
+            currentDhatu = dhatuName;
+            updateDhatuDisplay(dhatuName);
+            updateStatus();
+            
+            // Animation de transition
+            const display = document.getElementById('dhatu-display');
+            display.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            display.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                display.style.transform = 'translate(-50%, -50%) scale(1)';
+                display.style.opacity = '1';
+            }, 200);
+        }
+        
+        function updateDhatuDisplay(dhatuName) {
+            const data = dhatuData[dhatuName];
+            document.getElementById('current-dhatu').textContent = data.name;
+            document.getElementById('dhatu-desc').textContent = data.concept;
+            document.getElementById('dhatu-examples').textContent = data.examples;
+        }
+        
+        function selectLanguage(language) {
+            // Mise à jour visuelle des boutons
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentLanguage = language;
+            updateStatus();
+            
+            // Mise à jour de l'alphabet selon la langue
+            updateAlphabetTitle(language);
+        }
+        
+        function updateAlphabetTitle(language) {
+            const title = document.querySelector('.language-group:last-child .language-title');
+            title.textContent = `Alphabet (current: ${language})`;
+        }
+        
+        function performLetter(letter) {
+            console.log(`Exécution de la lettre ${letter} en ${currentLanguage} avec dhātu ${currentDhatu}`);
+            
+            // Configurations alphabet selon langue
+            const alphabetConfigs = {
+                'LSQ': {
+                    'A': { thumb: {x: 0, y: 0, z: 0.9}, index: {x: 1.4, y: 0, z: 0}, middle: {x: 1.4, y: 0, z: 0}, ring: {x: 1.4, y: 0, z: 0}, pinky: {x: 1.4, y: 0, z: 0} },
+                    'B': { thumb: {x: 0.8, y: 0, z: 0.2}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} }
+                },
+                'ASL': {
+                    'A': { thumb: {x: 0.2, y: 0, z: 0.7}, index: {x: 1.2, y: 0, z: 0}, middle: {x: 1.2, y: 0, z: 0}, ring: {x: 1.2, y: 0, z: 0}, pinky: {x: 1.2, y: 0, z: 0} },
+                    'B': { thumb: {x: 0.9, y: 0, z: 0.1}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} }
+                },
+                'LSF': {
+                    'A': { thumb: {x: 0.1, y: 0, z: 0.8}, index: {x: 1.3, y: 0, z: 0}, middle: {x: 1.3, y: 0, z: 0}, ring: {x: 1.3, y: 0, z: 0}, pinky: {x: 1.3, y: 0, z: 0} },
+                    'B': { thumb: {x: 0.7, y: 0, z: 0.3}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} }
+                }
+            };
+            
+            const config = alphabetConfigs[currentLanguage]?.[letter] || alphabetConfigs['LSQ'][letter];
+            
+            if (config && handControllers.right) {
+                handControllers.right.performGesture(config);
+                
+                // Analyser selon dhātu actuel
+                const analysis = analyzeLetterWithDhatu(letter, currentDhatu);
+                updateStatus(`Lettre ${letter} (${currentLanguage}) • ${analysis} • Dhātu: ${currentDhatu}`);
+            }
+            
+            // Animation de feedback
+            event.target.style.transform = 'scale(1.3)';
+            event.target.style.background = 'rgba(255, 102, 0, 0.7)';
+            
+            setTimeout(() => {
+                event.target.style.transform = 'scale(1)';
+                event.target.style.background = 'rgba(0, 255, 136, 0.3)';
+            }, 300);
+        }
+        
+        function analyzeLetterWithDhatu(letter, dhatu) {
+            const analyses = {
+                'RELATE': `Position spatiale de ${letter}`,
+                'MODAL': `Modalité gestuelle ${letter}`,
+                'EXIST': `Existence temporelle ${letter}`,
+                'EVAL': `Évaluation forme ${letter}`,
+                'COMM': `Communication ${letter}`,
+                'CAUSE': `Action causale ${letter}`,
+                'ITER': `Répétition ${letter}`,
+                'DECIDE': `Choix structural ${letter}`,
+                'FEEL': `Expression émotive ${letter}`
+            };
+            return analyses[dhatu] || `Analyse ${letter}`;
+        }
+        
+        function updateStatus(message = null) {
+            const defaultMessage = `Dhātu: ${currentDhatu} • Langue: ${currentLanguage} • Couverture: 92% universelle`;
+            document.getElementById('status-bar').textContent = message || defaultMessage;
+        }
+        
+        // Gestion du redimensionnement
+        window.addEventListener('resize', () => {
+            const canvasArea = document.getElementById('canvas-area');
+            camera.aspect = canvasArea.clientWidth / canvasArea.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvasArea.clientWidth, canvasArea.clientHeight);
+        });
+        
+        // Initialisation au chargement
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

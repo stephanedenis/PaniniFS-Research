@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaniniFS - Test des Gestes Baby Sign</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        
+        .gesture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .gesture-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .gesture-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .gesture-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid #667eea;
+        }
+        
+        .dhatu-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .description {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f1f3f4;
+            border-radius: 8px;
+        }
+        
+        .status {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+            color: #c62828;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤏 Test des Gestes Baby Sign</h1>
+        
+        <div class="controls">
+            <p><strong>Contrôles de test :</strong></p>
+            <button class="btn" onclick="loadGestures()">Charger Gestes</button>
+            <button class="btn" onclick="testAllGestures()">Tester Tous</button>
+            <button class="btn" onclick="clearGestures()">Nettoyer</button>
+        </div>
+        
+        <div id="status" class="status">
+            Cliquez sur "Charger Gestes" pour commencer le test.
+        </div>
+        
+        <div id="gesture-grid" class="gesture-grid">
+            <!-- Les gestes seront injectés ici -->
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour charger et tester les gestes baby sign
+        function loadGestures() {
+            const status = document.getElementById('status');
+            status.className = 'status';
+            status.innerHTML = '⏳ Chargement des gestes baby sign...';
+            
+            // Simuler les données dhātu
+            const testDhatus = [
+                { id: 'ma', name: 'मा (MA)', description: 'Matrice primordiale', gesture: 'mother' },
+                { id: 'ka', name: 'क (KA)', description: 'Initiation primordiale', gesture: 'give' },
+                { id: 'da', name: 'द (DA)', description: 'Don fondamental', gesture: 'want' },
+                { id: 'pa', name: 'प (PA)', description: 'Protection nourricière', gesture: 'eat' },
+                { id: 'ba', name: 'ब (BA)', description: 'Lien affectif', gesture: 'more' },
+                { id: 'ga', name: 'ग (GA)', description: 'Mouvement vital', gesture: 'go' },
+                { id: 'ja', name: 'ज (JA)', description: 'Génération créatrice', gesture: 'play' },
+                { id: 'ta', name: 'त (TA)', description: 'Extension spatiale', gesture: 'big' },
+                { id: 'na', name: 'न (NA)', description: 'Négation constructive', gesture: 'no' },
+                { id: 'la', name: 'ल (LA)', description: 'Mouvement fluide', gesture: 'water' },
+                { id: 'va', name: 'व (VA)', description: 'Souffle vital', gesture: 'wind' },
+                { id: 'sa', name: 'स (SA)', description: 'Union harmonieuse', gesture: 'together' },
+                { id: 'ha', name: 'ह (HA)', description: 'Expiration libératrice', gesture: 'hot' },
+                { id: 'ra', name: 'र (RA)', description: 'Vibration énergétique', gesture: 'music' },
+                { id: 'ya', name: 'य (YA)', description: 'Effort coordonné', gesture: 'work' },
+                { id: 'sha', name: 'श (SHA)', description: 'Silence tranquille', gesture: 'quiet' },
+                { id: 'ksha', name: 'क्ष (KSHA)', description: 'Territoire sécurisé', gesture: 'home' },
+                { id: 'gna', name: 'ज्ञ (GNA)', description: 'Connaissance intuitive', gesture: 'think' }
+            ];
+            
+            const grid = document.getElementById('gesture-grid');
+            grid.innerHTML = '';
+            
+            testDhatus.forEach((dhatu, index) => {
+                setTimeout(() => {
+                    const card = document.createElement('div');
+                    card.className = 'gesture-card';
+                    card.innerHTML = `
+                        <div class="gesture-container">
+                            <div data-baby-sign="${dhatu.gesture}" 
+                                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                [${dhatu.gesture}]
+                            </div>
+                        </div>
+                        <div class="dhatu-name">${dhatu.name}</div>
+                        <div class="description">${dhatu.description}</div>
+                        <div class="stats">
+                            <span>Geste: ${dhatu.gesture}</span>
+                            <span>ID: ${dhatu.id}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                    
+                    if (index === testDhatus.length - 1) {
+                        // Tous les éléments sont ajoutés, maintenant injecter les gestes
+                        setTimeout(() => {
+                            injectGesturesWithFallback();
+                        }, 500);
+                    }
+                }, index * 100);
+            });
+        }
+        
+        function injectGesturesWithFallback() {
+            const status = document.getElementById('status');
+            
+            // Vérifier si les gestes améliorés sont disponibles
+            if (typeof window.injectEnhancedBabySignGestures === 'function') {
+                try {
+                    window.injectEnhancedBabySignGestures();
+                    status.className = 'status success';
+                    status.innerHTML = '✅ Gestes baby sign anatomiques chargés! Animations réalistes des mains et corps activées.';
+                } catch (error) {
+                    status.className = 'status error';
+                    status.innerHTML = `❌ Erreur lors de l'injection des gestes améliorés: ${error.message}`;
+                }
+            } else {
+                // Fallback: charger le script dynamiquement
+                status.innerHTML = '🔄 Chargement des gestes anatomiques améliorés...';
+                
+                const script = document.createElement('script');
+                script.src = './enhanced-baby-sign-gestures.js';
+                script.onload = () => {
+                    try {
+                        if (typeof window.injectEnhancedBabySignGestures === 'function') {
+                            window.injectEnhancedBabySignGestures();
+                            status.className = 'status success';
+                            status.innerHTML = '✅ Gestes anatomiques chargés! Mains, corps et expressions faciales animés.';
+                        } else {
+                            throw new Error('Fonction injectEnhancedBabySignGestures non disponible');
+                        }
+                    } catch (error) {
+                        status.className = 'status error';
+                        status.innerHTML = `❌ Erreur après chargement: ${error.message}`;
+                    }
+                };
+                script.onerror = () => {
+                    // Fallback vers gestes basiques
+                    status.innerHTML = '⚠️ Tentative avec gestes basiques...';
+                    const fallbackScript = document.createElement('script');
+                    fallbackScript.src = '../production/documents/baby-sign-gestures.js';
+                    fallbackScript.onload = () => {
+                        if (typeof window.injectBabySignGestures === 'function') {
+                            window.injectBabySignGestures();
+                            status.className = 'status success';
+                            status.innerHTML = '✅ Gestes basiques chargés (fallback).';
+                        }
+                    };
+                    fallbackScript.onerror = () => {
+                        status.className = 'status error';
+                        status.innerHTML = '❌ Impossible de charger les gestes. Vérifiez les fichiers.';
+                    };
+                    document.head.appendChild(fallbackScript);
+                };
+                document.head.appendChild(script);
+            }
+        }
+        
+        function testAllGestures() {
+            const gestureElements = document.querySelectorAll('[data-baby-sign]');
+            const status = document.getElementById('status');
+            
+            status.className = 'status';
+            status.innerHTML = `🧪 Test de ${gestureElements.length} gestes...`;
+            
+            let animatedCount = 0;
+            let totalCount = gestureElements.length;
+            
+            gestureElements.forEach((element, index) => {
+                setTimeout(() => {
+                    // Simuler interaction (hover)
+                    element.style.transform = 'scale(1.2)';
+                    element.style.transition = 'transform 0.3s ease';
+                    
+                    // Vérifier si l'animation SVG est présente
+                    const hasAnimation = element.querySelector('svg') || element.innerHTML.includes('svg');
+                    if (hasAnimation) {
+                        animatedCount++;
+                    }
+                    
+                    setTimeout(() => {
+                        element.style.transform = 'scale(1)';
+                    }, 300);
+                    
+                    if (index === totalCount - 1) {
+                        setTimeout(() => {
+                            status.className = animatedCount > 0 ? 'status success' : 'status error';
+                            status.innerHTML = `🎯 Test terminé: ${animatedCount}/${totalCount} gestes avec animations SVG détectées.`;
+                        }, 500);
+                    }
+                }, index * 200);
+            });
+        }
+        
+        function clearGestures() {
+            document.getElementById('gesture-grid').innerHTML = '';
+            const status = document.getElementById('status');
+            status.className = 'status';
+            status.innerHTML = '🧹 Gestes nettoyés. Cliquez sur "Charger Gestes" pour recommencer.';
+        }
+        
+        // Auto-test au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(loadGestures, 1000);
+        });
+    </script>
+</body>
+</html>
