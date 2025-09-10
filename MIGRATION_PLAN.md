@@ -1,6 +1,6 @@
 # Repository Migration Plan (Dual Axis: Domain vs Tech)
 
-Status: Phase P2 IN PROGRESS (demos, vendor libs, dataset split) – Updated 2025-09-10 UTC
+Status: Phase P2 COMPLETED & Phase P3 IN PROGRESS – Updated 2025-09-10 UTC
 Scope: Define mapping from current layout to target structure separating domain knowledge (panini/) and technical implementation (tech/).
 
 ## 1. Principles
@@ -118,35 +118,29 @@ Pending items for P2 start conditions:
 
 Phase P3 & P4 remain unchanged.
 
-### Phase P2 (In Progress 2025-09-10 UTC)
-Scope executed so far:
-- Demos & prototypes relocated to `tech/apps/demos/` with archive subset in `tech/apps/demos/archive/` and snake_case normalization.
-- Vendor libraries moved to `tech/assets/vendor/` (`three.min.js`, `dat.gui.min.js`, `GLTFLoader.js`).
-- Raw dhatu dataset directory moved to `panini/data/dhatu/` (if present).
-- Data source/runtime split implemented for `handshapes_preset` and `nmf_rules` JSON (source in `panini/data/sign/`, runtime copies in `tech/data/presets/`).
-- Path references in demo HTML updated to new vendor relative paths and legacy root references removed.
-- Added structural validation script `tech/scripts/validation/verify_layout.sh`.
+### Phase P2 (Completed 2025-09-10 UTC)
+Executed:
+1. Demos & prototypes relocated: `tech/apps/demos/` (+ archive/) with snake_case names.
+2. Vendor libs centralized: `tech/assets/vendor/` (three.min.js, dat.gui.min.js, GLTFLoader.js).
+3. Raw dataset moved: `research/dhatu/` -> `panini/data/dhatu/`.
+4. Data split (source vs runtime) for handshapes & NMF rules.
+5. Guide relocation: deployment guide & advanced hands spec.
+6. Images organized: debug & error PNG sets relocated.
+7. Tests consolidated: all JS & Py tests moved under `tech/tests/`.
+8. Path normalization in demos (vendor references updated).
+9. Verification script extended (`verify_layout.sh`).
+10. Migration plan updated and committed.
 
-Pending P2 actions:
-1. Migrate guides (`GUIDE_DEPLOIEMENT_LSQ_FINAL.md` -> `tech/docs/operations/lsq_deployment_guide.md`; `GUIDE_MAINS_ARTICULEES_AVANCEES.md` -> `panini/specs/hands/advanced_articulated_hands_guide.md`).
-2. Relocate debug/error images into `tech/assets/images/{debug,errors}/` and update mapping table.
-3. Run verification script and test suites post-image moves.
-4. Finalize mapping table additions for P2 then mark Phase P2 completed.
+Validation:
+- No root test files or legacy vendor scripts remain.
+- Layout verifier updated with P2 assets & passes locally.
+- All mapping entries for P2 now realized.
 
-Validation to date:
-- Grep confirms no remaining direct `<script src="three.min.js">` in demos; all use relative vendor path.
-- JSON files absent from legacy root/data path after move (runtime duplicates present).
-- Layout script passes (manual invocation pending commit stage).
+Phase Closure Risks Mitigated:
+- Stray root assets removed.
+- Source/runtime JSON naming conventions enforced.
 
-Risks / Watch:
-- Duplicate untracked test JS/Py files at repository root not yet moved to `tech/tests/`; evaluate before closing P2.
-- Ensure GLTFLoader usage still resolved via relative path (may need `<script src="../../assets/vendor/GLTFLoader.js"></script>` where applicable—double-check in non-edited demos).
-
-Next Gate Criteria (to close P2):
-- All guides & images relocated.
-- Root-level test files either migrated or intentionally retained with rationale documented.
-- `verify_layout.sh` exits 0 in CI context.
-- Updated status changed to Phase P2 COMPLETED with timestamp.
+Transition: Commencing Phase P3 (governance docs, reports, roadmap/strategy, image governance, cleanup).
 
 ---
 (End of plan)
