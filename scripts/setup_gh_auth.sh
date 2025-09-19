@@ -1,0 +1,48 @@
+#!/bin/bash
+# Guide d'authentification GitHub CLI pour créer les projets dhātu
+
+echo "🔐 Configuration authentification GitHub CLI pour projets"
+echo "========================================================"
+echo ""
+echo "📋 Étapes nécessaires:"
+echo "1. Ajouter les permissions 'project' et 'read:project'"
+echo "2. Créer les 12 projets dhātu"
+echo ""
+
+echo "🚀 Étape 1: Authentification avec permissions projets"
+echo "Exécutez cette commande et suivez les instructions:"
+echo ""
+echo "   gh auth refresh -s project,read:project"
+echo ""
+echo "Cela va:"
+echo "- Ouvrir une page web pour confirmation"
+echo "- Ajouter les permissions nécessaires"
+echo "- Permettre la création de projets"
+echo ""
+
+echo "✅ Étape 2: Vérification permissions"
+echo "Après authentification, testez avec:"
+echo ""
+echo "   gh project list --owner stephanedenis"
+echo ""
+
+echo "🎯 Étape 3: Création projets dhātu"
+echo "Une fois authentifié, lancez:"
+echo ""
+echo "   ./scripts/create_projects_gh.sh"
+echo ""
+
+echo "📚 Alternative: Authentification via token"
+echo "Si problème avec device flow, créez un token manuellement:"
+echo "1. Aller sur: https://github.com/settings/tokens"
+echo "2. 'Generate new token (classic)'"
+echo "3. Sélectionner: repo, project, read:project"
+echo "4. Copier le token"
+echo "5. Exporter: export GITHUB_TOKEN='votre_token'"
+echo "6. Relancer: gh auth login --with-token < token_file"
+echo ""
+
+echo "🔗 Liens utiles:"
+echo "- GitHub Tokens: https://github.com/settings/tokens"
+echo "- gh CLI docs: https://cli.github.com/manual/gh_auth"
+echo ""
