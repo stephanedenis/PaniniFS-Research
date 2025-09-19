@@ -32,7 +32,7 @@ check absent three.min.js dat.gui.min.js GLTFLoader.js handshapes_preset.v0.1.js
 check absent GUIDE_DEPLOIEMENT_LSQ_FINAL.md GUIDE_MAINS_ARTICULEES_AVANCEES.md test-real-3d-models.js test_functional.py test_functional_fixed.py || true
 check absent REGLES_COPILOTAGE.md RAPPORT_TESTS_COMPLET.md VALIDATION_STATUS.md cloud-processing/FREE_COMPUTE_STRATEGY.md || true
 check absent interactive-validator language || true
-check absent archives tech/docs/archives archives/ archives_backup || true
+check absent archives tech/docs/archives archives/ archives_backup package.json package-lock.json node_modules || true
 
 # Forbid stray nested 'archives' directories anywhere except allowed history destinations
 for d in $(find . -type d -name archives 2>/dev/null | grep -v './\.git' || true); do
@@ -43,11 +43,11 @@ for d in $(find . -type d -name archives 2>/dev/null | grep -v './\.git' || true
 done
 
 # Root whitelist enforcement
-root_allowed=(./copilotage ./docs ./panini ./tech ./.git ./node_modules)
+root_allowed=(./copilotage ./docs ./panini ./tech ./.git)
 for entry in ./*; do
   [ -e "$entry" ] || continue
   case "$entry" in
-    ./README.md|./package.json|./package-lock.json|./.gitmodules) continue ;;
+    ./README.md|./.gitmodules) continue ;;
   esac
   if [ -d "$entry" ]; then
     skip=false
@@ -57,6 +57,9 @@ for entry in ./*; do
     fi
   fi
 done
+
+# Node workspace relocated under tech/node
+check exists tech/node/package.json tech/node/package-lock.json || true
 
 if $pass; then
   echo "[OK] Layout verification passed"

@@ -40,7 +40,7 @@
             position: relative;
         }
         
-        #language-selector {
+    #language-selector {
             position: fixed;
             right: 10px;
             top: 10px;
@@ -52,99 +52,7 @@
             backdrop-filter: blur(15px);
             z-index: 1000;
         }
-        
-        .panel-title {
-            color: #ff6600;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
-        }
-        
-        .dhatu-item {
-            background: rgba(255, 102, 0, 0.2);
-            margin: 8px 0;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #ff6600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .dhatu-item:hover {
-            background: rgba(255, 102, 0, 0.4);
-            transform: translateX(5px);
-        }
-        
-        .dhatu-item.active {
-            background: rgba(255, 102, 0, 0.6);
-            border-color: #ffaa44;
-            box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
-        }
-        
-        .dhatu-name {
-            font-weight: bold;
-            color: #ffaa44;
-            font-size: 14px;
-        }
-        
-        .dhatu-concept {
-            color: #ffffff;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-        
-        .dhatu-frequency {
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
-            color: #ffaa44;
-        }
-        
-        .language-group {
-            margin: 15px 0;
-            background: rgba(0, 255, 136, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 3px solid #00ff88;
-        }
-        
-        .language-title {
-            color: #00ff88;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-        
-        .language-btn {
-            background: linear-gradient(145deg, #1a4a3a, #0d2d1d);
-            color: #ffffff;
-            border: 1px solid #00ff88;
-            padding: 6px 12px;
-            margin: 2px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        
-        .language-btn:hover {
-            background: linear-gradient(145deg, #2a6a4a, #1d4d2d);
-            transform: scale(1.05);
-        }
-        
-        .language-btn.active {
-            background: linear-gradient(145deg, #44aa77, #337755);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-        }
+    .language-btn { background: linear-gradient(145deg, #44aa77, #337755); box-shadow: 0 0 10px rgba(0,255,136,0.3); }
         
         #status-bar {
             position: fixed;
@@ -160,18 +68,8 @@
             backdrop-filter: blur(10px);
         }
         
-        .dhatu-visualization {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid #ff6600;
-            backdrop-filter: blur(15px);
-        }
+    /* .dhatu-visualization supprimé */
+        /* Overlay central supprimé pour libérer l'espace scène */
         
         .dhatu-large {
             font-size: 48px;
@@ -231,6 +129,75 @@
         <!-- Panel des Dhātu (cœur du système) -->
         <div id="dhatu-panel">
             <div class="panel-title">🧬 DHĀTU UNIVERSELS</div>
+                        <div id="dhatu-sections"></div>
+                        <div id="alphabet-block" style="margin-top:18px;">
+                                <div class="panel-title" style="font-size:14px;">Alphabet & Chiffres</div>
+                                <div id="alpha-grid" class="alphabet-grid"></div>
+                                <div id="digit-grid" class="alphabet-grid" style="grid-template-columns: repeat(10,1fr); margin-top:8px;"></div>
+                        </div>
+                        <script>
+                        // Génération dynamique des sections Dhātu + phrases
+                        const PHRASES_BY_DHATU = {
+                            COMM: [
+                                { key:'hello', label:'Bonjour / Hello' },
+                                { key:'thank_you', label:'Merci / Thank you' },
+                                { key:'how_are_you', label:'Comment allez-vous ?' },
+                                { key:'goodbye', label:'Au revoir / Goodbye' },
+                                { key:'please', label:"S'il vous plaît" }
+                            ],
+                            FEEL: [ { key:'i_love_you', label:'Je vous aime' } ]
+                        };
+                        function buildDhatuPanel(){
+                            const container = document.getElementById('dhatu-sections');
+                            container.innerHTML='';
+                            Object.entries(dhatuData).forEach(([code,info])=>{
+                                const wrap = document.createElement('div');
+                                wrap.className='dhatu-collapsible';
+                                wrap.style.marginBottom='8px';
+                                const header = document.createElement('div');
+                                header.style.cursor='pointer';
+                                header.style.display='flex';
+                                header.style.alignItems='center';
+                                header.style.justifyContent='space-between';
+                                header.style.background='rgba(255,102,0,0.15)';
+                                header.style.padding='6px 8px';
+                                header.style.border='1px solid #ff6600';
+                                header.style.borderRadius='6px';
+                                header.innerHTML = `<span style="font-weight:bold;color:#ff8800;">${code}</span><span style="font-size:11px;color:#ccc;">${info.frequency}</span>`;
+                                const body = document.createElement('div');
+                                body.style.display='none';
+                                body.style.padding='6px 4px 10px';
+                                body.style.fontSize='12px';
+                                body.innerHTML = `<div style='color:#fff;margin:4px 0;'>${info.concept}</div><div style='color:#bbb;font-style:italic;margin-bottom:6px;'>${info.examples}</div>`;
+                                const phrases = PHRASES_BY_DHATU[code] || [];
+                                if(phrases.length){
+                                    const phrWrap = document.createElement('div');
+                                    phrWrap.style.display='flex';
+                                    phrWrap.style.flexDirection='column';
+                                    phrases.forEach(p=>{
+                                        const btn=document.createElement('button');
+                                        btn.className='language-btn';
+                                        btn.style.margin='2px 0';
+                                        btn.textContent = p.label;
+                                        btn.onclick=()=>performPhrase(p.key);
+                                        phrWrap.appendChild(btn);
+                                    });
+                                    body.appendChild(phrWrap);
+                                }
+                                header.addEventListener('click',()=>{
+                                    body.style.display = body.style.display==='none' ? 'block':'none';
+                                });
+                                wrap.appendChild(header); wrap.appendChild(body); container.appendChild(wrap);
+                            });
+                            // Alphabet dynamique
+                            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+                            const alphaGrid=document.getElementById('alpha-grid');
+                            letters.forEach(L=>{ const b=document.createElement('button'); b.className='alphabet-btn'; b.textContent=L; b.onclick=()=>performLetter(L); alphaGrid.appendChild(b); });
+                            const digits='0123456789'.split('');
+                            const digitGrid=document.getElementById('digit-grid');
+                            digits.forEach(d=>{ const b=document.createElement('button'); b.className='alphabet-btn'; b.textContent=d; b.onclick=()=>performDigit(d); digitGrid.appendChild(b); });
+                        }
+                        </script>
             <div class="dhatu-item" onclick="selectDhatu('RELATE')" data-dhatu="RELATE">
                 <div class="dhatu-frequency">57</div>
                 <div class="dhatu-name">RELATE</div>
@@ -285,15 +252,7 @@
         </div>
         
         <!-- Zone de visualisation 3D -->
-        <div id="canvas-area">
-            <div class="dhatu-visualization" id="dhatu-display">
-                <div class="dhatu-large" id="current-dhatu">RELATE</div>
-                <div class="dhatu-description" id="dhatu-desc">Relations spatiales et possession</div>
-                <div class="dhatu-examples" id="dhatu-examples">
-                    Manifestations: "dans, sur, de, avec" • Spatial: in, on, above • Possession: ownership, belonging
-                </div>
-            </div>
-        </div>
+    <div id="canvas-area"><!-- Zone centrale libre pour 3D --></div>
         
         <!-- Sélecteur de langues signées -->
         <div id="language-selector">
@@ -352,17 +311,11 @@
                 <button class="language-btn" onclick="performPhrase('i_love_you')">Je vous aime</button>
                 <button class="language-btn" onclick="performPhrase('goodbye')">Au revoir/Goodbye</button>
                 <button class="language-btn" onclick="performPhrase('please')">S'il vous plaît</button>
-            </div>
+                </div>
+                <!-- Phrases déplacées dans les sections Dhātu -->
             
-            <!-- Contrôles modèles 3D -->
-            <div class="language-group">
-                <div class="language-title">Modèles 3D Complets</div>
-                <button class="language-btn" onclick="loadHandModel('cesium')">� CesiumMan</button>
-                <button class="language-btn" onclick="loadHandModel('figure')">👤 Figure Riggée</button>
-                <button class="language-btn" onclick="loadHandModel('simple')">� Simple Riggé</button>
-                <button class="language-btn" onclick="loadProceduralModel('both')">� Mains Proc.</button>
-                <button class="language-btn" onclick="loadProceduralModel('skeleton')">💀 Squelette</button>
-            </div>
+            <!-- Contrôles modèles 3D (réduit aux mains procédurales récentes) -->
+            <!-- Modèle 3D chargé automatiquement (bouton retiré) -->
             
             <!-- Alphabet universel -->
             <div class="language-group">
@@ -391,8 +344,8 @@
     </div>
 
     <!-- Scripts Three.js et logique -->
-    <script src="../../assets/vendor/three.min.js"></script>
-    <script src="../../assets/vendor/GLTFLoader.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
     <script>
         // Configuration globale - ACCESSIBLE GLOBALEMENT
         window.scene = null;
@@ -403,7 +356,7 @@
         window.currentHands = { left: null, right: null };
         window.currentDhatu = 'RELATE';
         window.currentLanguage = 'LSQ';
-        window.handControllers = { left: null, right: null };
+    window.handControllers = null; // contrôleurs procéduraux retirés
         window.anatomyHelpers = [];
         
         // Debug logs
@@ -411,12 +364,8 @@
             console.log(`🔧 DEBUG: ${message}`);
         }
         
-        // Modèles 3D - utilisation de géométries procédurales
-        const handModels = {
-            'basic_hand': 'procedural',
-            'skeleton_hand': 'wireframe',
-            'full_body': 'composite'
-        };
+    // Modèle de recherche unique (main droite)
+    const RESEARCH_HAND_MODEL = 'https://market.pmnd.rs/api/files/right-hand-white-webxr.glb';
         
         // Données des dhātu avec descriptions complètes
         const dhatuData = {
@@ -508,7 +457,7 @@
                     await facialModule.loadFacialPresets();
                     facialVersion = facialModule.getFacialVersion();
                     window.signRuntime = {
-                        hand:getHandControllers?.(), // placeholder if future
+                        hand:null,
                         data: {
                             getHandshapes: signModule.getHandshapes,
                             getHandshape: signModule.getHandshape,
@@ -525,7 +474,7 @@
                 }
 
                 initThreeJS();
-                updateDhatuDisplay('RELATE');
+                if(typeof buildDhatuPanel==='function') buildDhatuPanel();
                 updateStatus();
                 debugLog('Initialisation terminée avec succès');
             } catch (error) {
@@ -559,16 +508,9 @@
             // Éclairage cinématique
             setupAdvancedLighting();
             
-            // Chargement modèle par défaut
-            // Chargement modèle par défaut selon disponibilité GLTFLoader
-            debugLog('Chargement modèle par défaut...');
-            if (typeof THREE.GLTFLoader !== 'undefined') {
-                debugLog('GLTFLoader disponible - chargement CesiumMan');
-                loadHandModel('cesium');
-            } else {
-                debugLog('GLTFLoader non disponible - modèle procédural');
-                loadProceduralModel('right');
-            }
+            // Chargement automatique du modèle de main (droite unique)
+            debugLog('Chargement de la main de recherche (droite)');
+            loadResearchHand();
             
             window.camera.position.set(0, 1, 3);
             window.camera.lookAt(0, 0, 0);
@@ -628,99 +570,46 @@
             }
         }
         
-        function loadHandModel(type) {
-            debugLog(`Chargement modèle: ${type}`);
-            updateStatus(`🔄 Chargement du modèle 3D ${type}...`);
-            
-            // Supprimer l'ancien modèle s'il existe
-            const existingModel = window.scene.getObjectByName(`human_model_${type}`);
-            if (existingModel) {
-                window.scene.remove(existingModel);
-                debugLog(`Ancien modèle ${type} supprimé`);
+            // Chargement des mains de recherche (modèles GLTF)
+        async function loadResearchHand(){
+            try {
+                clearCurrentHands();
+                updateStatus('Chargement main avancée...');
+                const loader = new THREE.GLTFLoader();
+                const gltf = await new Promise((res,rej)=>loader.load(RESEARCH_HAND_MODEL,res,undefined,rej));
+                const hand = gltf.scene;
+                hand.name = 'research_hand_right';
+                hand.position.set(0.0, 0.9, 0);
+                hand.scale.setScalar(1.05);
+                scene.add(hand);
+                currentHands.right = hand;
+                try {
+                    const handIKMod = await import('./modules/handIK.js');
+                    window.handIK = handIKMod.initHandIK(hand);
+                    if(window.handIK) debugLog('HandIK initialisé (main droite unique)');
+                } catch(e){ console.warn('Init HandIK échoué', e); }
+                updateStatus('✅ Main avancée chargée');
+                addMinimalBody();
+            } catch(e){
+                console.error('Erreur chargement main avancée', e);
+                updateStatus('❌ Échec chargement main avancée');
             }
-            
-            // Charger un vrai modèle 3D avec GLTFLoader
-            const loader = new THREE.GLTFLoader();
-            const modelPath = type === 'cesium' ? '../../assets/models/CesiumMan.glb' :
-                            type === 'figure' ? '../../assets/models/RiggedFigure.glb' :
-                            '../../assets/models/RiggedSimple.glb';
-            
-            loader.load(
-                modelPath,
-                (gltf) => {
-                    debugLog(`Modèle ${modelPath} chargé avec succès`);
-                    
-                    const model = gltf.scene;
-                    model.name = `human_model_${type}`;
-                    
-                    // Centrer et redimensionner le modèle
-                    const box = new THREE.Box3().setFromObject(model);
-                    const center = box.getCenter(new THREE.Vector3());
-                    const size = box.getSize(new THREE.Vector3());
-                    
-                    // Normaliser la taille
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 3 / maxDim; // Taille normalisée à 3 unités
-                    model.scale.setScalar(scale);
-                    
-                    // Centrer le modèle
-                    model.position.sub(center.multiplyScalar(scale));
-                    model.position.y += 1; // Ajuster la hauteur
-                    
-                    // Ajouter les ombres
-                    model.traverse((child) => {
-                        if (child.isMesh) {
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                        }
-                    });
-                    
-                    // Stocker l'animation mixer si disponible
-                    if (gltf.animations && gltf.animations.length > 0) {
-                        const mixer = new THREE.AnimationMixer(model);
-                        const action = mixer.clipAction(gltf.animations[0]);
-                        action.play();
-                        
-                        // Stocker le mixer pour l'animation
-                        model.userData.mixer = mixer;
-                        debugLog(`Animation ${gltf.animations[0].name} activée`);
-                    }
-                    
-                    window.scene.add(model);
-                    debugLog(`Modèle ${type} ajouté à la scène`);
-                    
-                    updateStatus(`✅ Modèle 3D ${type} chargé avec succès`);
-
-                    // Initialiser Hand IK (si module disponible)
-                    (async () => {
-                        try {
-                            const handIKMod = await import('./modules/handIK.js');
-                            window.handIK = handIKMod.initHandIK(model);
-                            if(window.handIK) debugLog('HandIK initialisé');
-                        } catch(e){
-                            console.warn('HandIK non initialisé:', e);
-                        }
-                    })();
-                    
-                    // Forcer un rendu
-                    if (window.renderer && window.scene && window.camera) {
-                        window.renderer.render(window.scene, window.camera);
-                        debugLog('Rendu forcé après chargement modèle');
-                    }
-                },
-                (progress) => {
-                    const percent = Math.round((progress.loaded / progress.total) * 100);
-                    updateStatus(`📥 Chargement ${type}: ${percent}%`);
-                },
-                (error) => {
-                    console.error(`Erreur chargement ${modelPath}:`, error);
-                    updateStatus(`❌ Erreur chargement ${type}`);
-                    
-                    // Fallback: garder l'ancien système si le chargement échoue
-                    loadProceduralModel(type);
-                }
-            );
         }
+
+            function addMinimalBody(){
+                const body = new THREE.Group();
+                body.name='minimal_body';
+                const mat = new THREE.MeshLambertMaterial({ color:0x333344 });
+                const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.35,1.0,10), mat);
+                torso.position.y=0.3;
+                body.add(torso);
+                const armGeo = new THREE.CylinderGeometry(0.06,0.06,0.8,8);
+                const leftArm = new THREE.Mesh(armGeo, mat); leftArm.position.set(-0.5,0.5,0); leftArm.rotation.z=0.3; body.add(leftArm);
+                const rightArm = new THREE.Mesh(armGeo, mat); rightArm.position.set(0.5,0.5,0); rightArm.rotation.z=-0.3; body.add(rightArm);
+                scene.add(body);
+            }
+
+            // Ancienne fonction loadHandModel supprimée (modèles GLTF retirés)
         
         function loadProceduralModel(type) {
             debugLog(`Chargement modèle procédural: ${type}`);
@@ -735,8 +624,6 @@
                     loadSingleHand('right', 1);
                 } else if (type === 'right') {
                     loadSingleHand('right', 0);
-                } else if (type === 'skeleton') {
-                    loadSkeletonHand();
                 }
                 debugLog(`Modèle ${type} chargé avec succès`);
             } catch (error) {
@@ -784,60 +671,7 @@
                 finger.receiveShadow = true;
                 
                 // Ajouter des articulations visibles
-                const jointMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600 });
-                const joint = new THREE.Mesh(new THREE.SphereGeometry(0.015), jointMaterial);
-                joint.position.copy(finger.position);
-                joint.position.y += 0.07;
-                handGroup.add(joint);
-                
-                handGroup.add(finger);
-                debugLog(`Doigt ${fingerName} ajouté`);
-            });
-            
-            // Position et échelle pour visibilité
-            handGroup.position.set(positionX, 0, 0);
-            handGroup.scale.set(3, 3, 3); // Plus grand pour être visible
-            
-            window.scene.add(handGroup);
-            currentHands[side] = handGroup;
-            
-            // Créer contrôleur pour gestes
-            handControllers[side] = new HandController(handGroup, side);
-            
-            debugLog(`Main ${side} créée avec ${handGroup.children.length} éléments`);
-            updateStatus(`✅ Main ${side} chargée avec succès`);
-            
-            // Forcer un rendu pour vérifier la visibilité
-            if (window.renderer && window.scene && window.camera) {
-                window.renderer.render(window.scene, window.camera);
-                debugLog('Rendu forcé après création main');
-            }
-        }
-        
-        function loadSkeletonHand() {
-            const skeletonGroup = new THREE.Group();
-            
-            const boneMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xeeeeee,
-                wireframe: true
-            });
-            
-            // Structure osseuse simplifiée
-            const boneGeometry = new THREE.CylinderGeometry(0.01, 0.01, 0.12, 6);
-            
-            for (let i = 0; i < 5; i++) {
-                const bone = new THREE.Mesh(boneGeometry, boneMaterial);
-                bone.position.set((i - 2) * 0.03, 0, 0);
-                skeletonGroup.add(bone);
-            }
-            
-            skeletonGroup.position.set(0, 0, 0);
-            skeletonGroup.scale.set(2, 2, 2);
-            window.scene.add(skeletonGroup);
-            
-            currentHands.right = skeletonGroup;
-            updateStatus('✅ Modèle squelette chargé');
-        }
+                // (bloc procédural obsolète retiré)
         
         function loadFullBody() {
             // Corps basique pour contexte
@@ -881,36 +715,9 @@
         }
         
         // Contrôleur de main avancé
-        class HandController {
-            constructor(handMesh, side) {
-                this.hand = handMesh;
-                this.side = side;
-                this.fingers = {};
-                
-                // Mapper les doigts
-                this.hand.children.forEach(child => {
-                    if (child.name !== 'palm') {
-                        this.fingers[child.name] = child;
-                    }
-                });
-            }
-            
-            setFingerPose(fingerName, rotation) {
-                if (this.fingers[fingerName]) {
-                    this.fingers[fingerName].rotation.x = rotation.x || 0;
-                    this.fingers[fingerName].rotation.y = rotation.y || 0;
-                    this.fingers[fingerName].rotation.z = rotation.z || 0;
-                }
-            }
-            
-            performGesture(gestureData) {
-                Object.entries(gestureData).forEach(([finger, pose]) => {
-                    this.setFingerPose(finger, pose);
-                });
-            }
-        }
+    // HandController supprimé
         
-        function performPhrase(phraseKey) {
+    function performPhrase(phraseKey) {
             const phrases = {
                 'hello': {
                     gesture: { thumb: {x: 0, y: 0, z: 0.8}, index: {x: 0, y: 0, z: 0}, middle: {x: 0, y: 0, z: 0}, ring: {x: 0, y: 0, z: 0}, pinky: {x: 0, y: 0, z: 0} },
@@ -945,56 +752,32 @@
             };
             
             const phrase = phrases[phraseKey];
-            if (phrase && handControllers.right) {
-                handControllers.right.performGesture(phrase.gesture);
+            if (phrase && window.handIK) {
+                try { window.handIK.transitionToHandshape('A'); } catch(e) {}
                 selectDhatu(phrase.dhatu);
                 updateStatus(`${phrase.description} • Dhātu: ${phrase.dhatu} • Langue: ${currentLanguage}`);
             }
         }
         
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // Animation de rotation douce pour les objets 3D
-            if (scene.children.length > 2) {
-                scene.children.forEach(child => {
-                    if (child.isMesh) {
-                        child.rotation.y += 0.005;
-                    }
-                });
-            }
-            
-            window.renderer.render(window.scene, window.camera);
-        }
+    /* Duplicate animate() supprimé – boucle principale déjà définie plus haut avec dt + HandIK */
         
         function selectDhatu(dhatuName) {
-            // Mise à jour visuelle des boutons
-            document.querySelectorAll('.dhatu-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelector(`[data-dhatu="${dhatuName}"]`).classList.add('active');
-            
+            // Mise à jour visuelle des boutons (anciens items statiques si présents)
+            document.querySelectorAll('.dhatu-item').forEach(item => item.classList.remove('active'));
+            const staticBtn = document.querySelector(`[data-dhatu="${dhatuName}"]`);
+            if(staticBtn) staticBtn.classList.add('active');
             currentDhatu = dhatuName;
-            updateDhatuDisplay(dhatuName);
             updateStatus();
-            
-            // Animation de transition
-            const display = document.getElementById('dhatu-display');
-            display.style.transform = 'translate(-50%, -50%) scale(0.8)';
-            display.style.opacity = '0.5';
-            
-            setTimeout(() => {
-                display.style.transform = 'translate(-50%, -50%) scale(1)';
-                display.style.opacity = '1';
-            }, 200);
+            // Ouvrir section collapsible correspondante
+            const match = Array.from(document.querySelectorAll('#dhatu-sections .dhatu-collapsible'))
+                .find(div => div.firstChild && div.firstChild.textContent.includes(dhatuName));
+            if(match){
+                const body = match.children[1];
+                if(body && body.style.display==='none') body.style.display='block';
+            }
         }
         
-        function updateDhatuDisplay(dhatuName) {
-            const data = dhatuData[dhatuName];
-            document.getElementById('current-dhatu').textContent = data.name;
-            document.getElementById('dhatu-desc').textContent = data.concept;
-            document.getElementById('dhatu-examples').textContent = data.examples;
-        }
+    // updateDhatuDisplay supprimé (contenu dans sections collapsibles)
         
         function selectLanguage(language) {
             // Mise à jour visuelle des boutons
@@ -1036,15 +819,12 @@
             
             const config = alphabetConfigs[currentLanguage]?.[letter] || alphabetConfigs['LSQ'][letter];
             
-            if (config && handControllers.right) {
-                handControllers.right.performGesture(config);
-                // Appliquer HandIK basé sur le code de lettre (si handshape disponible)
-                if(window.handIK){
-                    try { window.handIK.applyHandshape(letter); } catch(e){ console.warn('HandIK apply error', e); }
-                }
-                // Analyser selon dhātu actuel
+            if(window.handIK){
+                try { window.handIK.transitionToHandshape(letter); } catch(e){ console.warn('HandIK transition error', e); }
                 const analysis = analyzeLetterWithDhatu(letter, currentDhatu);
                 updateStatus(`Lettre ${letter} (${currentLanguage}) • ${analysis} • Dhātu: ${currentDhatu}`);
+            } else {
+                updateStatus(`Lettre ${letter} • HandIK non initialisé`);
             }
             
             // Animation de feedback
@@ -1055,6 +835,13 @@
                 event.target.style.transform = 'scale(1)';
                 event.target.style.background = 'rgba(0, 255, 136, 0.3)';
             }, 300);
+        }
+
+        function performDigit(digit){
+            if(window.handIK){
+                try { window.handIK.transitionToHandshape(digit); } catch(e){}
+                updateStatus(`Chiffre ${digit} • Dhātu: ${currentDhatu}`);
+            }
         }
         
         function analyzeLetterWithDhatu(letter, dhatu) {
