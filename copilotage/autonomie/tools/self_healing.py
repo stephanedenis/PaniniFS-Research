@@ -29,6 +29,8 @@ from dataclasses import dataclass, asdict
 import threading
 import queue
 import importlib.util
+import signal
+import os
 
 
 class HealthStatus(Enum):
@@ -48,6 +50,7 @@ class ComponentType(Enum):
     FILE_SYSTEM = "file_system"
     NETWORK = "network"
     PROCESS = "process"
+    TERMINAL_SESSION = "terminal_session"  # Nouveau type pour sessions terminal
 
 
 class RepairAction(Enum):
@@ -59,6 +62,8 @@ class RepairAction(Enum):
     FIX_PERMISSIONS = "fix_permissions"
     RESET_CONFIGURATION = "reset_configuration"
     ALTERNATIVE_METHOD = "alternative_method"
+    KILL_INTERACTIVE_PROCESS = "kill_interactive_process"  # Nouveau
+    ESCAPE_PAGER_EDITOR = "escape_pager_editor"           # Nouveau
 
 
 @dataclass
@@ -691,6 +696,222 @@ class BlockageDetector:
             )
         
         return None
+
+
+class TerminalBlockageDetector:
+    """Détecteur spécialisé blocages terminal (pagers, éditeurs)"""
+    
+    def __init__(self, workspace_root: Path):
+        self.workspace_root = Path(workspace_root)
+        self.logger = logging.getLogger("terminal_blockage")
+        
+        # Processus interactifs connus
+        self.interactive_processes = {
+            'less', 'more', 'most', 'pg',
+            'vi', 'vim', 'nvim', 'nano', 'emacs', 'ed',
+            'man', 'git', 'gh'
+        }
+        
+        # Signaux communs pour échapper des pagers/éditeurs
+        self.escape_sequences = {
+            'less': ['q'],
+            'more': ['q'],
+            'vi': [':q!', '\x1b'],  # :q! et ESC
+            'vim': [':q!', '\x1b'],
+            'nano': ['\x18'],       # Ctrl+X
+            'emacs': ['\x18\x03'],  # Ctrl+X Ctrl+C
+            'man': ['q'],
+            'git': ['q'],           # Pour git log, git show, etc.
+            'gh': ['q']             # Pour certaines commandes gh interactives
+        }
+    
+    def detect_terminal_blockage(self) -> List[Dict[str, Any]]:
+        """Détection blocages terminal actifs"""
+        blocked_terminals = []
+        
+        try:
+            # Recherche processus interactifs suspects
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'create_time']):
+                try:
+                    if self._is_blocking_process(proc):
+                        blocked_terminals.append({
+                            'pid': proc.info['pid'],
+                            'name': proc.info['name'],
+                            'cmdline': ' '.join(proc.info['cmdline']) if proc.info['cmdline'] else '',
+                            'duration': time.time() - proc.info['create_time'],
+                            'type': 'interactive_process'
+                        })
+                        
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            # Détection patterns terminal suspendus
+            suspended_patterns = self._detect_suspended_terminals()
+            blocked_terminals.extend(suspended_patterns)
+            
+        except Exception as e:
+            self.logger.error(f"Error detecting terminal blockage: {e}")
+        
+        return blocked_terminals
+    
+    def _is_blocking_process(self, proc) -> bool:
+        """Détermine si un processus bloque probablement un terminal"""
+        try:
+            name = proc.info['name']
+            cmdline = proc.info['cmdline']
+            
+            # Processus interactif connu
+            if name in self.interactive_processes:
+                # Vérifier s'il tourne depuis trop longtemps (>2 min)
+                duration = time.time() - proc.info['create_time']
+                if duration > 120:  # 2 minutes
+                    return True
+            
+            # Commandes git/gh avec patterns suspects
+            if cmdline and len(cmdline) > 0:
+                cmd_str = ' '.join(cmdline).lower()
+                if ('git log' in cmd_str or 'git show' in cmd_str or 
+                    'git diff' in cmd_str or 'gh api' in cmd_str):
+                    duration = time.time() - proc.info['create_time']
+                    if duration > 60:  # 1 minute pour ces commandes
+                        return True
+            
+            return False
+            
+        except Exception:
+            return False
+    
+    def _detect_suspended_terminals(self) -> List[Dict[str, Any]]:
+        """Détection terminaux suspendus par TTY analysis"""
+        suspended = []
+        
+        try:
+            # Recherche sessions terminal avec états suspects
+            # (Cette partie pourrait être étendue avec analyse TTY plus sophistiquée)
+            
+            # Pour l'instant, détecter via processus parents
+            terminal_procs = []
+            for proc in psutil.process_iter(['pid', 'name', 'ppid']):
+                try:
+                    if proc.info['name'] in ['bash', 'zsh', 'sh', 'fish']:
+                        terminal_procs.append(proc)
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            # Analyser les enfants de chaque terminal
+            for terminal in terminal_procs:
+                try:
+                    children = terminal.children(recursive=True)
+                    long_running_children = []
+                    
+                    for child in children:
+                        try:
+                            if child.name() in self.interactive_processes:
+                                duration = time.time() - child.create_time()
+                                if duration > 180:  # 3 minutes
+                                    long_running_children.append({
+                                        'pid': child.pid,
+                                        'name': child.name(),
+                                        'duration': duration
+                                    })
+                        except (psutil.NoSuchProcess, psutil.AccessDenied):
+                            continue
+                    
+                    if long_running_children:
+                        suspended.append({
+                            'terminal_pid': terminal.pid,
+                            'type': 'suspended_terminal',
+                            'blocking_children': long_running_children,
+                            'duration': max(c['duration'] for c in long_running_children)
+                        })
+                        
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+                    
+        except Exception as e:
+            self.logger.error(f"Error detecting suspended terminals: {e}")
+        
+        return suspended
+    
+    def auto_escape_blockage(self, blockage_info: Dict[str, Any]) -> bool:
+        """Échappement automatique d'un blocage terminal"""
+        try:
+            if blockage_info['type'] == 'interactive_process':
+                return self._escape_interactive_process(blockage_info)
+            elif blockage_info['type'] == 'suspended_terminal':
+                return self._escape_suspended_terminal(blockage_info)
+            
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Error auto-escaping blockage: {e}")
+            return False
+    
+    def _escape_interactive_process(self, blockage_info: Dict[str, Any]) -> bool:
+        """Échappement processus interactif"""
+        try:
+            pid = blockage_info['pid']
+            name = blockage_info['name']
+            
+            # Tentative envoi séquences d'échappement
+            if name in self.escape_sequences:
+                proc = psutil.Process(pid)
+                
+                # Essayer d'envoyer SIGTERM d'abord (plus propre)
+                proc.terminate()
+                time.sleep(2)
+                
+                # Vérifier si terminé
+                if not proc.is_running():
+                    self.logger.info(f"Successfully terminated {name} (PID: {pid})")
+                    return True
+                
+                # Si pas terminé, SIGKILL en dernier recours
+                proc.kill()
+                time.sleep(1)
+                
+                if not proc.is_running():
+                    self.logger.info(f"Force killed {name} (PID: {pid})")
+                    return True
+            
+            return False
+            
+        except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
+            self.logger.warning(f"Could not escape process: {e}")
+            return False
+    
+    def _escape_suspended_terminal(self, blockage_info: Dict[str, Any]) -> bool:
+        """Échappement terminal suspendu"""
+        try:
+            blocking_children = blockage_info['blocking_children']
+            
+            # Terminer tous les processus bloquants
+            escaped_count = 0
+            for child_info in blocking_children:
+                try:
+                    proc = psutil.Process(child_info['pid'])
+                    proc.terminate()
+                    time.sleep(1)
+                    
+                    if not proc.is_running():
+                        escaped_count += 1
+                    else:
+                        proc.kill()
+                        if not proc.is_running():
+                            escaped_count += 1
+                            
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    escaped_count += 1  # Considéré comme résolu
+            
+            success = escaped_count == len(blocking_children)
+            if success:
+                self.logger.info(f"Escaped suspended terminal (cleaned {escaped_count} processes)")
+            
+            return success
+            
+        except Exception as e:
+            self.logger.error(f"Error escaping suspended terminal: {e}")
+            return False
 
 
 class AutoRepairEngine:

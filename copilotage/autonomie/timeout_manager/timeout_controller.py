@@ -200,6 +200,98 @@ class TimeoutPredictor:
         return defaults.get(category, 60.0)
 
 
+class InteractiveCommandDetector:
+    """Détecteur commandes interactives bloquantes pour autonomie"""
+    
+    def __init__(self):
+        # Commandes qui ouvrent des pagers/éditeurs
+        self.interactive_commands = {
+            # Pagers
+            'less', 'more', 'most', 'pg',
+            # Éditeurs
+            'vi', 'vim', 'nvim', 'nano', 'emacs', 'ed', 'joe', 'micro',
+            # Git avec pager possible
+            'git log', 'git show', 'git diff', 'git blame',
+            # Man pages
+            'man', 'info', 'help',
+            # Autres interactifs
+            'top', 'htop', 'iotop', 'watch', 'tail -f'
+        }
+        
+        # Commandes GitHub CLI potentiellement interactives
+        self.gh_interactive_patterns = [
+            'gh auth login',
+            'gh repo create --interactive',
+            'gh issue create --interactive',
+            'gh pr create --interactive'
+        ]
+        
+        # Options/flags qui rendent les commandes non-interactives
+        self.non_interactive_flags = {
+            '--no-pager', '--porcelain', '--batch', '--quiet', '-q',
+            '--json', '--format', '--output', '-o', '--non-interactive'
+        }
+    
+    def is_interactive_command(self, command: str) -> bool:
+        """Détecte si une commande risque d'être interactive"""
+        command = command.strip().lower()
+        
+        # Check direct interactive commands
+        for interactive_cmd in self.interactive_commands:
+            if command.startswith(interactive_cmd):
+                # Vérifier si des flags non-interactifs sont présents
+                has_non_interactive = any(
+                    flag in command for flag in self.non_interactive_flags
+                )
+                if not has_non_interactive:
+                    return True
+        
+        # Check GitHub CLI patterns
+        for pattern in self.gh_interactive_patterns:
+            if pattern in command:
+                return True
+        
+        # Check pour git sans --no-pager
+        if command.startswith('git ') and '--no-pager' not in command:
+            git_commands = ['log', 'show', 'diff', 'blame', 'help']
+            if any(f'git {cmd}' in command for cmd in git_commands):
+                return True
+        
+        return False
+    
+    def make_non_interactive(self, command: str) -> str:
+        """Transforme une commande interactive en non-interactive"""
+        command = command.strip()
+        
+        # Git commands - ajouter --no-pager
+        if command.startswith('git ') and '--no-pager' not in command:
+            if any(cmd in command for cmd in ['log', 'show', 'diff', 'blame']):
+                return f"git --no-pager {command[4:]}"
+        
+        # GitHub CLI - ajouter --json ou équivalent quand possible
+        if command.startswith('gh api'):
+            if '--method POST' in command and '| cat' not in command:
+                return f"{command} | cat"
+        
+        # Pagers - remplacer par cat ou head
+        if command.startswith(('less ', 'more ')):
+            file_arg = command.split()[-1]
+            return f"cat {file_arg}"
+        
+        # Man pages - utiliser --help à la place quand possible
+        if command.startswith('man '):
+            topic = command.split()[-1]
+            help_text = f"Help not available for {topic}"
+            return f"{topic} --help 2>/dev/null || echo '{help_text}'"
+        
+        # Pour autres commandes interactives, ajouter timeout court
+        if self.is_interactive_command(command):
+            timeout_msg = "Command timed out - likely interactive"
+            return f"timeout 10s {command} || echo '{timeout_msg}'"
+        
+        return command
+
+
 class StateCheckpointer:
     """Gestionnaire checkpoints pour reprise automatique"""
     
@@ -668,3 +760,131 @@ if __name__ == "__main__":
     
     # Lancement test
     asyncio.run(test_timeout_manager())
+
+
+class AutonomyCommandProcessor:
+    """Processeur de commandes avec protection autonomie complète"""
+    
+    def __init__(self, workspace_root: Path):
+        self.workspace_root = Path(workspace_root)
+        self.interactive_detector = InteractiveCommandDetector()
+        
+        # Import TerminalBlockageDetector si disponible
+        try:
+            from ..tools.self_healing import TerminalBlockageDetector
+            self.terminal_detector = TerminalBlockageDetector(workspace_root)
+        except ImportError:
+            self.terminal_detector = None
+    
+    def preprocess_command(self, command: str, context: Dict[str, Any] = None) -> str:
+        """Préprocessing commande pour éviter blocages autonomie"""
+        
+        # Étape 1: Détecter commandes interactives
+        if self.interactive_detector.is_interactive_command(command):
+            # Transformer en version non-interactive
+            safe_command = self.interactive_detector.make_non_interactive(command)
+            
+            if context and context.get('log_transformations', True):
+                print(f"🔧 Commande transformée pour autonomie:")
+                print(f"   Original: {command}")
+                print(f"   Sécurisée: {safe_command}")
+            
+            return safe_command
+        
+        return command
+    
+    def detect_and_resolve_terminal_blockages(self) -> Dict[str, Any]:
+        """Détection et résolution automatique blocages terminal"""
+        
+        if not self.terminal_detector:
+            return {"status": "terminal_detector_unavailable"}
+        
+        # Détecter blocages
+        blockages = self.terminal_detector.detect_terminal_blockage()
+        
+        if not blockages:
+            return {"status": "no_blockages_detected"}
+        
+        # Résoudre automatiquement
+        resolved_count = 0
+        resolution_details = []
+        
+        for blockage in blockages:
+            try:
+                success = self.terminal_detector.auto_escape_blockage(blockage)
+                
+                resolution_details.append({
+                    "blockage": blockage,
+                    "resolved": success,
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+                if success:
+                    resolved_count += 1
+                    
+            except Exception as e:
+                resolution_details.append({
+                    "blockage": blockage,
+                    "resolved": False,
+                    "error": str(e),
+                    "timestamp": datetime.now().isoformat()
+                })
+        
+        return {
+            "status": "blockages_processed",
+            "total_blockages": len(blockages),
+            "resolved_count": resolved_count,
+            "success_rate": resolved_count / len(blockages) if blockages else 1.0,
+            "details": resolution_details
+        }
+    
+    def ensure_terminal_autonomy(self, command: str, context: Dict[str, Any] = None) -> str:
+        """Assurer autonomie complète pour commande terminal"""
+        
+        # Étape 1: Préprocessing commande
+        safe_command = self.preprocess_command(command, context)
+        
+        # Étape 2: Vérification blocages existants
+        resolution_result = self.detect_and_resolve_terminal_blockages()
+        
+        # Étape 3: Logging si résolutions effectuées
+        if resolution_result["status"] == "blockages_processed":
+            if context and context.get('log_resolutions', True):
+                print(f"🚀 Résolution autonome blocages terminal:")
+                print(f"   Blocages détectés: {resolution_result['total_blockages']}")
+                print(f"   Résolus: {resolution_result['resolved_count']}")
+                print(f"   Taux succès: {resolution_result['success_rate']:.1%}")
+        
+        return safe_command
+
+
+# Test autonomie si exécuté directement
+if __name__ == "__main__":
+    
+    async def test_autonomy_processor():
+        print("🧪 TEST PROCESSEUR AUTONOMIE")
+        print("=" * 50)
+        
+        processor = AutonomyCommandProcessor(Path.cwd())
+        
+        # Test commandes problématiques
+        test_commands = [
+            "gh api repos/:owner/:repo/milestones --method POST",  # Celle qui a causé le problème
+            "git log --oneline",
+            "less README.md", 
+            "vi test.txt",
+            "man python",
+            "python normal_command.py"  # Commande normale
+        ]
+        
+        for cmd in test_commands:
+            print(f"\n🔍 Test: {cmd}")
+            safe_cmd = processor.ensure_terminal_autonomy(cmd, {"log_transformations": True})
+            print(f"✅ Résultat: {safe_cmd}")
+        
+        # Test résolution blocages
+        print(f"\n🔧 Test résolution blocages...")
+        resolution = processor.detect_and_resolve_terminal_blockages()
+        print(f"📊 Résultat: {resolution}")
+    
+    asyncio.run(test_autonomy_processor())
